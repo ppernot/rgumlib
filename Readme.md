@@ -12,7 +12,7 @@ devtools::install_github("ppernot/rgumlib")
 ```
 
 ```r
-library("rplos")
+library("rgumlib")
 ```
 
 ## What is rgumlib ?
