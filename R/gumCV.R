@@ -1,0 +1,153 @@
+#'@title
+#' Combination of Variances
+#'
+#'@description
+#' Uncertainty propagation by combination of variances (GUM). 
+#' 
+#' @param \code{fExpr} an expression or a function object
+#' @param \code{x.mu} named vector of mean values 
+#'                    with names compatible with \code{fExpr}
+#' @param \code{x.u} named vector of standard uncertainty values 
+#'                   (one of {x.u, x.cov} oblig) 
+#' @param \code{x.cor} named correlation matrix between model parameters
+#' @param \code{x.cov} named variance/covariance matrix 
+#'                     between model parameters (one of {x.u, x.cov} oblig)  
+#' @param \code{budgetTable} whether the budget table is computed
+#' @param \code{silent} whether gumCV executes without printout
+#' 
+#' @return A list containing:
+#' \item{y.mu}{mean value of model}
+#' \item{y.u}{standard uncertainty of model}
+#' \item{anova}{(vector) relative contributions of parameters to y variance}
+#' \item{anovaCov}{global relative contribution of parameters covariance to y variance}
+#' \item{budget}{(dataframe) uncertainty budget table, mostly to be printed}
+#' 
+#' @references (GUM) Evaluation of measurement data – Guide to the expression of 
+#' uncertainty in measurement. JCGM 100:2008. 
+#' \url{http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf}
+#'  
+#' @export
+#' 
+
+gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL, 
+                  budgetTable = TRUE, silent=FALSE) {
+  if (missing(fExpr)) {
+    print('\nGUM combination of variances method for model fExpr',quote=F)
+    print(" ",quote=F)
+    print("Call   : gumCV(fExpr,x.mu, x.u, x.cor, x.cov, budgetTable, silent)",
+          quote=F)
+    print("-fExpr : (oblig) an expression or a function object",quote=F)
+    print("-x.mu  : (oblig) named vector of mean values",quote=F)
+    print("         with names compatible with fExpr",quote=F)
+    print("-x.u   : (one of {x.u, x.cov} oblig) named vector of standard",quote=F)
+    print("         uncertainty values",quote=F)
+    print("-x.cor : (matrix, def=NULL) named correlation matrix between model parameters",
+          quote=F)
+    print("-x.cov : (one of {x.u, x.cov} oblig) names variance/covariance matrix",quote=F)    
+    print("         between model parameters",quote=F) 
+    print("-budgetTable : (logical, def=TRUE) whether the budget table is computed",quote=F) 
+    print("-silent : (logical, def=FALSE) whether gumCV executes without printout",quote=F) 
+    print(" ",quote=F)
+    print('Returns: list(y.mu, y.u, anova, anovaCov, budget)',quote=F)
+    print("-y.mu  : mean value of model",quote=F)
+    print("-y.u   : standard uncertainty of model",quote=F)
+    print("-anova : (vector) relative contributions of parameters to y variance",quote=F)
+    print("-anovaCov : global relative contribution of parameters covariance",quote=F)
+    print("-        to y variance",quote=F)
+    print("-budget: (dataframe) uncertainty budget table, mostly to be printed",quote=F)
+    return(invisible())
+  }
+  # Check data consistency
+  locL = length(x.mu)  
+  locX = as.list(x.mu)
+
+  # Provide default names do input vector, if missing
+  if(is.null(names(locX))) names(locX)=paste0('X',1:locL)
+  
+  # Get variables names in fExpr
+  var.names= if(class(fExpr)=='function') names(formals(fExpr)) else all.vars(fExpr)
+  
+  # Check names compatibility 
+  x.names=names(locX)
+  if(!all(x.names %in% var.names))
+    stop('x.mu variables names not consistent with fExpr')
+    
+  # Sensitivities and mean value
+  if (class(fExpr)=='function') {
+    # Derivation numerique
+    fun = function (x) do.call(fExpr,as.list(x))
+    y.mu = fun(x.mu)
+    J = numDeriv::grad(fun,x.mu)
+  } else {
+    # Derivation symbolique
+    df = eval(deriv(fExpr,x.names),locX)
+    y.mu  = eval(fExpr,locX)
+    J = as.vector(attr(df, "gradient"))
+  }
+
+  # Covariance matrix
+  if(is.null(x.cov)) {
+    if (min(eigen(x.cor, symmetric=TRUE, only.values=TRUE)$values) < 
+          sqrt(.Machine$double.eps))
+      stop("Supplied correlation matrix is not postitive definite\n")
+    V = outer(x.u, x.u, "*")*x.cor
+  } else {
+    if (min(eigen(x.cov, symmetric=TRUE, only.values=TRUE)$values) < 
+          sqrt(.Machine$double.eps))
+      stop("Supplied var/covar matrix is not postitive definite\n")
+    V = x.cov
+  }
+     
+  # Combinaison des variances
+  y.u = (t(J) %*% V %*% J)^0.5
+  
+  if(!silent & !budgetTable) {
+    cat('*** Combinaison of variances:')
+    uncPrint(y.mu,y.u) # Pretty print results
+    cat('\n ')
+  }
+  
+  # Anova
+  yu2  = y.u^2
+  j2u2 = J^2 * x.u^2
+  anova=rep(NA,length(x.mu))
+  names(anova)=x.names
+  anovaCov=0
+  if(yu2 !=0 ) {
+    anova = j2u2/yu2
+    anovaCov = 1-sum(anova)
+  }
+  
+  if(budgetTable) {
+    #Build budget table   
+    selX = x.u != 0 # exclude constant params
+    budget=data.frame(
+                      Valeur = sprintf("%.3e",c(x.mu[selX],y.mu)),
+                      Inc_Std. = sprintf("%.2e",c(x.u[selX],y.u)),
+                      J = c(sprintf("%.2e",J[selX]),'<--'),
+                      J2.U2 = sprintf("%.2e",c(j2u2[selX],y.u^2)),
+                      Anova = c(sprintf("%.2f",anova[selX]),""),
+                      stringsAsFactors = FALSE)  
+    rownames(budget) = c(x.names[selX],'Y')
+    
+    if(abs(anovaCov) > 2*.Machine$double.eps) {
+      # Insert covariances contribution into budget table
+      covLine=data.frame(Valeur='', Inc_Std.='', J='',
+                         J2.U2 = sprintf("%.2e",yu2-sum(j2u2)),
+                         Anova = sprintf("%.2f",anovaCov),
+                         stringsAsFactors = FALSE)
+      l=nrow(budget)
+      budget=rbind(budget[-l,],covLine,budget[l,])
+      rownames(budget) = c(x.names[selX],'Cov','Y')
+      
+    } 
+    if(!silent) print(budget,right=FALSE)
+
+    } else {
+    budget = NA
+    
+  }      
+
+  return( list(y.mu=y.mu, y.u=y.u[1,1], anova=anova, 
+               anovaCov=anovaCov, budget=budget) )     
+}
