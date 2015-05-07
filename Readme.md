@@ -4,12 +4,13 @@ Uncertainty Propagation (GUM & GUM-Supp1) and Sensitivity Analysis
 
 ## Install
 
-You can install this package in R from GitHub
+You can install this package in R from GitHub by executing
 
 ```r
 install.packages("devtools")
 devtools::install_github("ppernot/rgumlib")
 ```
+and load it the usual way
 
 ```r
 library("rgumlib")
@@ -25,8 +26,9 @@ The package implements also various plotting functions, and tools for sensitivit
 
 It has been mostly used as a teaching package.
 
-## Want to test it ?
+## Want to test it before installing ?
 
-`rgumlib` is the engine behind the [upsa](https://upsa.shinyapps.io/DynamicUI/) Shiny application.
+`rgumlib` is the engine behind the [upsa](https://upsa.shinyapps.io/DynamicUI/) 
+Shiny application which implements most of its features.
 
 
