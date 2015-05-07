@@ -7,6 +7,8 @@ Author: Pascal PERNOT
 Maintainer: <pascal.pernot@u-psud.fr>
 Description:  
 URL: https://upsa.shinyapps.io/DynamicUI/
+URL: http://github.com/ppernot/rgumlib
+BugReports: http://github.com/ppernot/rgumlib/issues
 License: GPL-2
 Imports: sensitivity, numDeriv, mvtnorm, fields, triangle, msm
 
