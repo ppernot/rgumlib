@@ -94,7 +94,7 @@ xSample = function (M=1000,x.mu,x.u,x.pdf,x.df,
                stud  = 'av+sd*qt(z[,ip],df=nu)',
                unif  = 'qunif(z[,ip],min=av-sd*3^0.5,max=av+sd*3^0.5)',
                triangle = 'triangle::qtriangle(z[,ip],a=av-sd*6^0.5,b=av+sd*6^0.5)',
-               arcsine = 'qarcsine(z[,ip],min=av-sd*2^0.5,max=av+sd*2^0.5)',
+               arcsine = 'qarcsine(z[,ip],a=av-sd*2^0.5,b=av+sd*2^0.5)',
                default= NULL
     )
     if(is.null(pdf))
