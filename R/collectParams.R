@@ -9,8 +9,8 @@
 #' the standard uncertainty in \code{var.mu}, the pdf in \code{var.pdf}, and
 #' the degrees of freedom in \code{var.df}. 
 #' 
-#' @param \code{fExpr} an expression or a function object
-#' @param \code{mc} flag to detect data for Monte Carlo sampling
+#' @param fExpr An expression or a function object.
+#' @param mc Flag to detect data for Monte Carlo sampling.
 #' 
 #' @return A list containing:
 #' \item{x.names}{vector of names for the input parameters}

@@ -13,27 +13,31 @@
 #' By default, \code{gumS1} is non-adaptative and performs the user-specified
 #' number of simulations. 
 #' 
-#' @param \code{fExpr} an expression or a function object
-#' @param \code{x.mu} named vector of mean values 
-#'                    with names compatible with \code{fExpr}
-#' @param \code{x.u} named vector of standard uncertainty values 
-#'                   (one of {x.u, x.cov} oblig) 
-#' @param \code{x.pdf} named vector of pdf types (norm, unif, stud...)
-#' @param \code{x.df} named vector of degrees of freedom for \code{x.pdf}
-#' @param \code{x.cor} named correlation matrix between model parameters
-#' @param \code{x.cov} named variance/covariance matrix 
-#'                     between model parameters (one of {x.u, x.cov} oblig)  
-#' @param \code{nrun} number of runs in each sample packet
-#' @param \code{h1} number of packets in first step of \code{gumS2}
-#' @param \code{adapt} whether use the sequential adaptive method
-#' @param \code{p} coverage of confidence interval
-#' @param \code{stdev} whether to converge standard deviation (\code{gumS1};
-#'                    for \code{gumS2} convergence is based on the variance)
-#' @param \code{interval} whether to converge confidence interval (\code{gumS1})
-#' @param \code{ndig} number of significant figures to converge 
-#' @param \code{nrunMax} maximum number of runs allowed
-#' @param \code{silent} whether function executes without printout
-#' 
+#' @param fExpr An expression or a function object.
+#' @param x.mu Named vector of mean values 
+#'                    with names compatible with \code{fExpr}.
+#' @param x.u Named vector of standard uncertainty values 
+#'                   (one of \{\code{x.u}, \code{x.cov}\} mandatory). 
+#' @param x.pdf Named vector of pdf types (see \code{\link{PDFs}}).
+#' @param x.df Named vector of degrees of freedom for \code{x.pdf}.
+#' @param x.cor Named correlation matrix between model parameters.
+#' @param x.cov Named variance/covariance matrix 
+#'                     between model parameters (one of \{\code{x.u}, 
+#'                     \code{x.cov}\} mandatory).  
+#' @param nrun Number of runs in each sample packet.
+#' @param h1 Number of packets in first step of \code{gumS2}.
+#' @param adapt Flag to use the sequential adaptive method.
+#' @param p Coverage of confidence interval.
+#' @param stdev Flag for adaptative method to converge standard 
+#'              deviation (\code{gumS1}; for \code{gumS2} convergence 
+#'              is based on the variance).
+#' @param interval Flag to converge confidence interval (\code{gumS1}).
+#' @param ndig Number of significant figures to converge. 
+#' @param nrunMax Maximum number of runs allowed.
+#' @param silent Flag to run without printout.
+#' @param delFrac Multiplicative factor on  numerical tolerance. 
+#'                For compatibility with examples in GUM-Supp1 [1].
+#' #' 
 #' @return A list containing:
 #' \item{y.mu}{mean value of model}
 #' \item{y.u}{standard uncertainty of model}
@@ -43,8 +47,8 @@
 #' \item{X}{(matrix) sample of inputs used to converge statistics}
 #' \item{Y}{(vector) sample of outputs corresponding to X}
 #' 
-#' @references [1] Evaluation of measurement data – Supplement 1 to 
-#' the "Guide to the expression of uncertainty in measurement" – 
+#' @references [1] Evaluation of measurement data - Supplement 1 to 
+#' the "Guide to the expression of uncertainty in measurement" -  
 #' Propagation of distributions using a Monte Carlo method. \emph{JCGM} \strong{101}:2008.
 #' \href{http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.pdf}{PDF}
 #' @references  [2] G. W\"ubbeler, P. M. Harris, M. G. Cox and C. Elster (2010) 

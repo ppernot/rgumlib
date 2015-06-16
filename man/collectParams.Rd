@@ -7,9 +7,9 @@
 collectParams(fExpr, mc = TRUE)
 }
 \arguments{
-\item{\code{fExpr}}{an expression or a function object}
+\item{fExpr}{An expression or a function object.}
 
-\item{\code{mc}}{flag to detect data for Monte Carlo sampling}
+\item{mc}{Flag to detect data for Monte Carlo sampling.}
 }
 \value{
 A list containing:

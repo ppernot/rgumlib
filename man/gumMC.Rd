@@ -15,41 +15,47 @@ gumS2(fExpr, x.mu, x.u, x.pdf, x.df, x.cor = diag(length(x.mu)),
   silent = FALSE, nrunMax = 1e+06)
 }
 \arguments{
-\item{\code{fExpr}}{an expression or a function object}
+\item{fExpr}{An expression or a function object.}
 
-\item{\code{x.mu}}{named vector of mean values
-with names compatible with \code{fExpr}}
+\item{x.mu}{Named vector of mean values
+with names compatible with \code{fExpr}.}
 
-\item{\code{x.u}}{named vector of standard uncertainty values
-(one of {x.u, x.cov} oblig)}
+\item{x.u}{Named vector of standard uncertainty values
+(one of \{\code{x.u}, \code{x.cov}\} mandatory).}
 
-\item{\code{x.pdf}}{named vector of pdf types (norm, unif, stud...)}
+\item{x.pdf}{Named vector of pdf types (see \code{\link{PDFs}}).}
 
-\item{\code{x.df}}{named vector of degrees of freedom for \code{x.pdf}}
+\item{x.df}{Named vector of degrees of freedom for \code{x.pdf}.}
 
-\item{\code{x.cor}}{named correlation matrix between model parameters}
+\item{x.cor}{Named correlation matrix between model parameters.}
 
-\item{\code{x.cov}}{named variance/covariance matrix
-between model parameters (one of {x.u, x.cov} oblig)}
+\item{x.cov}{Named variance/covariance matrix
+between model parameters (one of \{\code{x.u},
+\code{x.cov}\} mandatory).}
 
-\item{\code{nrun}}{number of runs in each sample packet}
+\item{nrun}{Number of runs in each sample packet.}
 
-\item{\code{h1}}{number of packets in first step of \code{gumS2}}
+\item{adapt}{Flag to use the sequential adaptive method.}
 
-\item{\code{adapt}}{whether use the sequential adaptive method}
+\item{ndig}{Number of significant figures to converge.}
 
-\item{\code{p}}{coverage of confidence interval}
+\item{p}{Coverage of confidence interval.}
 
-\item{\code{stdev}}{whether to converge standard deviation (\code{gumS1};
-for \code{gumS2} convergence is based on the variance)}
+\item{delFrac}{Multiplicative factor on  numerical tolerance.
+               For compatibility with examples in GUM-Supp1 [1].
+#'}
 
-\item{\code{interval}}{whether to converge confidence interval (\code{gumS1})}
+\item{stdev}{Flag for adaptative method to converge standard
+deviation (\code{gumS1}; for \code{gumS2} convergence
+is based on the variance).}
 
-\item{\code{ndig}}{number of significant figures to converge}
+\item{interval}{Flag to converge confidence interval (\code{gumS1}).}
 
-\item{\code{nrunMax}}{maximum number of runs allowed}
+\item{silent}{Flag to run without printout.}
 
-\item{\code{silent}}{whether function executes without printout}
+\item{nrunMax}{Maximum number of runs allowed.}
+
+\item{h1}{Number of packets in first step of \code{gumS2}.}
 }
 \value{
 A list containing:
@@ -84,8 +90,8 @@ S=gumS2(fExpr,x.mu,x.u,x.pdf,x.df=NULL)
 ECIPlot(S$Y)
 }
 \references{
-[1] Evaluation of measurement data – Supplement 1 to
-the "Guide to the expression of uncertainty in measurement" –
+[1] Evaluation of measurement data - Supplement 1 to
+the "Guide to the expression of uncertainty in measurement" -
 Propagation of distributions using a Monte Carlo method. \emph{JCGM} \strong{101}:2008.
 \href{http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.pdf}{PDF}
 

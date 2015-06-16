@@ -16,11 +16,13 @@ qarcsine(p, a = 0, b = 1)
 rarcsine(n, a = 0, b = 1)
 }
 \arguments{
-\item{\code{x,q}}{vector of quantiles}
+\item{x,q}{Vector of quantiles.}
 
-\item{\code{p}}{vector of probabilities}
+\item{a,b}{Lower and upper limits of the distribution. Must be finite.}
 
-\item{\code{n}}{number of random draws}
+\item{p}{Vector of probabilities.}
+
+\item{n}{Number of observations.}
 }
 \description{
 Density, distribution function, quantile function and random generation for

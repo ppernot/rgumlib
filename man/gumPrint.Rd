@@ -13,15 +13,15 @@ CIPrint(y, uy, p = 0.95, fac = 1.96)
 CIPrint1(uy, y_low, y_high, p = 0.95)
 }
 \arguments{
-\item{\code{y}}{mean value}
+\item{y}{Mean value.}
 
-\item{\code{uy}}{standard uncertainty on \code{y}}
+\item{uy}{Standard uncertainty on \code{Y}.}
 
-\item{\code{p}}{coverage of confidence interval}
+\item{p}{Coverage of confidence interval.}
 
-\item{\code{fac}}{enlargment factor corresponding to \code{p}}
+\item{fac}{Enlargment factor corresponding to \code{p}.}
 
-\item{\code{y_low,y_high}}{lower and upper limits of coverage interval}
+\item{y_low,y_high}{Lower and upper limits of coverage interval.}
 }
 \value{
 A character string.

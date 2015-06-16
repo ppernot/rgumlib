@@ -10,11 +10,11 @@
 #'\code{CIPrint1()} is used to print coverage intervals 
 #'from interval limits.
 
-#'@param \code{y} mean value
-#'@param \code{uy} standard uncertainty on \code{y}
-#'@param \code{p} coverage of confidence interval
-#'@param \code{fac} enlargment factor corresponding to \code{p}
-#'@param \code{y_low,y_high} lower and upper limits of coverage interval
+#'@param y Mean value.
+#'@param uy Standard uncertainty on \code{Y}.
+#'@param p Coverage of confidence interval.
+#'@param fac Enlargment factor corresponding to \code{p}.
+#'@param y_low,y_high Lower and upper limits of coverage interval.
 #'  
 #'@return A character string.
 

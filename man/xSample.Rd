@@ -9,25 +9,26 @@ xSample(M = 1000, x.mu, x.u, x.pdf, x.df, x.cor = diag(length(x.mu)),
   x.cov = NULL)
 }
 \arguments{
-\item{\code{M}}{sample size}
+\item{M}{Sample size.}
 
-\item{\code{x.mu}}{named vector of mean values
-with names compatible with \code{fExpr}}
+\item{x.mu}{Named vector of mean values
+with names compatible with \code{fExpr}.}
 
-\item{\code{x.u}}{named vector of standard uncertainty values
-(one of {x.u, x.cov} oblig)}
+\item{x.u}{Named vector of standard uncertainty values
+(one of \{\code{x.u}, \code{x.cov}\} mandatory).}
 
-\item{\code{x.pdf}}{named vector of pdf types (norm, unif, stud...)}
+\item{x.pdf}{Named vector of pdf types (see below).}
 
-\item{\code{x.df}}{named vector of degrees of freedom for \code{x.pdf}}
+\item{x.df}{Named vector of degrees of freedom for \code{x.pdf}.}
 
-\item{\code{x.cor}}{named correlation matrix between model parameters}
+\item{x.cor}{Named correlation matrix between model parameters.}
 
-\item{\code{x.cov}}{named variance/covariance matrix
-                    between model parameters (one of {x.u, x.cov} oblig)}
+\item{x.cov}{Named variance/covariance matrix between model parameters
+           (one of \{\code{x.u}, \code{x.cov}\} mandatory).}
 }
 \value{
-\code{X} a MxN matrix of M values for N variables
+\code{X} A \code{M}*\code{N} matrix of \code{M} values for \code{N}
+         variables.
 }
 \description{
 Generate Monte Carlo sample from prescribed PDF.

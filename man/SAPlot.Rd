@@ -7,9 +7,9 @@
 SAPlot(X, cex = 1)
 }
 \arguments{
-\item{\code{X}}{a MxN matrix of M values for N variables}
+\item{X}{A \code{M}x\code{N} matrix of \code{M} values for \code{N} variables.}
 
-\item{\code{cex}}{graphical parameter}
+\item{cex}{Graphical parameter.}
 }
 \value{
 A plot.

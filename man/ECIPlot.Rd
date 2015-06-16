@@ -7,11 +7,11 @@
 ECIPlot(Y, p = 0.95, cex = 1)
 }
 \arguments{
-\item{\code{Y}}{a vector}
+\item{Y}{A vector.}
 
-\item{\code{p}}{coverage of confidence interval}
+\item{p}{Coverage of confidence interval.}
 
-\item{\code{cex}}{graphical parameter}
+\item{cex}{Graphical parameter.}
 }
 \value{
 A plot.

@@ -8,25 +8,25 @@ sobolSA(fExpr, x.mu, x.u, x.pdf, x.df, M = 10000, nboot = 0, graph = TRUE,
   cex = 1)
 }
 \arguments{
-\item{\code{fExpr}}{an expression or a function object}
+\item{fExpr}{An expression or a function object.}
 
-\item{\code{x.mu}}{named vector of mean values
-with names compatible with \code{fExpr}}
+\item{x.mu}{Named vector of mean values
+with names compatible with \code{fExpr}.}
 
-\item{\code{x.u}}{named vector of standard uncertainty values
-(one of {x.u, x.cov} oblig)}
+\item{x.u}{Named vector of standard uncertainty values
+(one of \{\code{x.u}, \code{x.cov}\} mandatory).}
 
-\item{\code{x.pdf}}{named vector of pdf types (norm, unif, stud...)}
+\item{x.pdf}{Named vector of pdf types (see \code{\link{PDFs}}).}
 
-\item{\code{x.df}}{named vector of degrees of freedom for \code{x.pdf}}
+\item{x.df}{Named vector of degrees of freedom for \code{x.pdf}.}
 
-\item{\code{M}}{size of Sobol samples}
+\item{M}{Size of Sobol samples.}
 
-\item{\code{nboot}}{size of bootstrap to calculate uncertainty on Sobol indices}
+\item{nboot}{Size of bootstrap to calculate uncertainty on Sobol indices.}
 
-\item{\code{graph}}{(logical) if TRUE (default), plot bargraphs of Sobol indices}
+\item{graph}{Flag to plot bargraphs of Sobol indices.}
 
-\item{\code{cex}}{a graphical parameter}
+\item{cex}{A graphical parameter.}
 }
 \value{
 See \code{\link[sensitivity]{soboljansen}}.

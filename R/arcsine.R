@@ -5,9 +5,10 @@
 #' Density, distribution function, quantile function and random generation for
 #' the arcsine distribution on the interval from \code{a} to \code{b}. 
 #' 
-#' @param \code{x,q} vector of quantiles
-#' @param \code{p} vector of probabilities
-#' @param \code{n} number of random draws
+#' @param x,q Vector of quantiles.
+#' @param p Vector of probabilities.
+#' @param n Number of observations.
+#' @param a,b Lower and upper limits of the distribution. Must be finite.
 #' 
 #' @aliases parcsine qarcsine rarcsine 
 #' @examples

@@ -6,17 +6,17 @@
 #' Only for independeninput parameters. This is a wrapper for the \code{soboljansen}
 #' function of package \code{sensitivity}.
 #' 
-#' @param \code{fExpr} an expression or a function object
-#' @param \code{x.mu} named vector of mean values 
-#'                    with names compatible with \code{fExpr}
-#' @param \code{x.u} named vector of standard uncertainty values 
-#'                   (one of {x.u, x.cov} oblig) 
-#' @param \code{x.pdf} named vector of pdf types (norm, unif, stud...)
-#' @param \code{x.df} named vector of degrees of freedom for \code{x.pdf}
-#' @param \code{M} size of Sobol samples
-#' @param \code{nboot} size of bootstrap to calculate uncertainty on Sobol indices
-#' @param \code{graph} (logical) if TRUE (default), plot bargraphs of Sobol indices
-#' @param \code{cex} a graphical parameter
+#' @param fExpr An expression or a function object.
+#' @param x.mu Named vector of mean values 
+#'             with names compatible with \code{fExpr}.
+#' @param x.u Named vector of standard uncertainty values 
+#'            (one of \{\code{x.u}, \code{x.cov}\} mandatory).
+#' @param x.pdf Named vector of pdf types (see \code{\link{PDFs}}).
+#' @param x.df Named vector of degrees of freedom for \code{x.pdf}.
+#' @param M Size of Sobol samples.
+#' @param nboot Size of bootstrap to calculate uncertainty on Sobol indices.
+#' @param graph Flag to plot bargraphs of Sobol indices.
+#' @param cex A graphical parameter.
 #' 
 #' @return See \code{\link[sensitivity]{soboljansen}}.
 #' 

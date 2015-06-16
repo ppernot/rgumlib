@@ -5,19 +5,20 @@
 #' Generate Monte Carlo sample from prescribed PDF. 
 #' All PDFs are parameterized by their mean and standard deviation.
 #'
-#' @param \code{M} sample size 
-#' @param \code{x.mu} named vector of mean values 
-#'                    with names compatible with \code{fExpr}
-#' @param \code{x.u} named vector of standard uncertainty values 
-#'                   (one of {x.u, x.cov} oblig) 
-#' @param \code{x.pdf} named vector of pdf types (norm, unif, stud...)
-#' @param \code{x.df} named vector of degrees of freedom for \code{x.pdf}
-#' @param \code{x.cor} named correlation matrix between model parameters
-#' @param \code{x.cov} named variance/covariance matrix 
-#'                     between model parameters (one of {x.u, x.cov} oblig)  
-#' 
+#' @param M Sample size. 
+#' @param x.mu Named vector of mean values 
+#'             with names compatible with \code{fExpr}.
+#' @param x.u Named vector of standard uncertainty values 
+#'            (one of \{\code{x.u}, \code{x.cov}\} mandatory).
+#' @param x.pdf Named vector of pdf types (see below).
+#' @param x.df Named vector of degrees of freedom for \code{x.pdf}.
+#' @param x.cor Named correlation matrix between model parameters.
+#' @param x.cov Named variance/covariance matrix between model parameters 
+#'            (one of \{\code{x.u}, \code{x.cov}\} mandatory).
+#'             
 #' @return 
-#' \code{X} a MxN matrix of M values for N variables
+#' \code{X} A \code{M}*\code{N} matrix of \code{M} values for \code{N} 
+#'          variables.
 #' 
 #' @details 
 #' Available distributions:

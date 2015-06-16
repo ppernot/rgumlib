@@ -7,20 +7,21 @@
 vgSA(fExpr, x.mu, x.u, X, Y, budgetTable = TRUE, silent = FALSE)
 }
 \arguments{
-\item{\code{fExpr}}{an expression or a function object}
+\item{fExpr}{An expression or a function object.}
 
-\item{\code{x.mu}}{named vector of mean values
-with names compatible with \code{fExpr}}
+\item{x.mu}{Named vector of mean values
+with names compatible with \code{fExpr}.}
 
-\item{\code{x.u}}{named vector of standard uncertainty values}
+\item{x.u}{Named vector of standard uncertainty values.}
 
-\item{\code{X}}{a MxN matrix of M values for N input variables}
+\item{X}{A \code{M}x\code{N} matrix of \code{M} values for
+\code{N} input variables.}
 
-\item{\code{Y}}{a vector of values corresponding to \code{X}}
+\item{Y}{A vector of values corresponding to \code{X}.}
 
-\item{\code{budgetTable}}{whether the budget table is computed}
+\item{budgetTable}{Flag to compute the budget table.}
 
-\item{\code{silent}}{whether gumCV executes without printout}
+\item{silent}{Flag to run without printout.}
 }
 \value{
 A list containing:

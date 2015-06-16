@@ -5,7 +5,7 @@ Version: 0.1.0
 Date: 2015-05-06
 Author: Pascal PERNOT
 Maintainer: <pascal.pernot@u-psud.fr>
-Description: Uncertainty Propagation
+Description: Uncertainty Propagation.
 URL: URL: https://github.com/ppernot/rgumlib
 BugReports: https://github.com/ppernot/rgumlib/issues
 License: GPL-2

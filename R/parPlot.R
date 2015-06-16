@@ -26,7 +26,7 @@ paraPlot = function (x, col = 1, lty = 1, pch=19, var.label = FALSE, ...) {
 parPlot = function(X, maxPoints=256) {
   sdX=apply(X,2,sd) # Identify fixed params to exclude from plot
   nP=min(maxPoints,nrow(X))
-  iSamp = seq.int(1,nrow(X),len=nP)
+  iSamp = seq.int(1,nrow(X),length.out=nP)
   X1=X[iSamp,sdX != 0]
   par(cex=1,cex.axis=1.5)
   colors=genColors(X1[,ncol(X1)])

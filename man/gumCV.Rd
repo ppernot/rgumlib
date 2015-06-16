@@ -8,36 +8,40 @@ gumCV(fExpr, x.mu, x.u, x.cor = diag(length(x.mu)), x.cov = NULL,
   budgetTable = TRUE, silent = FALSE)
 }
 \arguments{
-\item{\code{fExpr}}{an expression or a function object}
+\item{fExpr}{An expression or a function object. For an expression,
+all variables will be considered as uncertain. For a
+function the list of uncertain variables is derived
+from the list of arguments.}
 
-\item{\code{x.mu}}{named vector of mean values
-with names compatible with \code{fExpr}}
+\item{x.mu}{Named vector of mean values
+with names compatible with \code{fExpr}.}
 
-\item{\code{x.u}}{named vector of standard uncertainty values
-(one of {x.u, x.cov} oblig)}
+\item{x.u}{Named vector of standard uncertainty values
+(one of \{\code{x.u}, \code{x.cov}\} mandatory).}
 
-\item{\code{x.cor}}{named correlation matrix between model parameters}
+\item{x.cor}{Named correlation matrix between model parameters}
 
-\item{\code{x.cov}}{named variance/covariance matrix
-between model parameters (one of {x.u, x.cov} oblig)}
+\item{x.cov}{Named variance/covariance matrix
+between model parameters
+(one of \{\code{x.u}, \code{x.cov}\} mandatory)}
 
-\item{\code{budgetTable}}{whether the budget table is computed}
+\item{budgetTable}{Flag to controle cmputation of the budget table.}
 
-\item{\code{silent}}{whether gumCV executes without printout}
+\item{silent}{Flag to execute \code{gumCV} without printout.}
 }
 \value{
 A list containing:
 \item{y.mu}{mean value of model}
 \item{y.u}{standard uncertainty of model}
 \item{anova}{(vector) relative contributions of parameters to y variance}
-\item{anovaCov}{global relative contribution of parameters covariance to y variance}
+\item{anovaCov}{global relative contribution of parameters covariance to \code{Y} variance}
 \item{budget}{(dataframe) uncertainty budget table, mostly to be printed}
 }
 \description{
 Uncertainty propagation by combination of variances (GUM).
 }
 \references{
-(GUM) Evaluation of measurement data – Guide to the expression of
+(GUM) Evaluation of measurement data - Guide to the expression of
 uncertainty in measurement. JCGM 100:2008.
 \url{http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf}
 }

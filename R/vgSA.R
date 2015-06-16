@@ -5,14 +5,15 @@
 #' Uses Monte Carlo sample to generate Variance Gradients estimates.
 #' Only for independent input parameters. 
 #' 
-#' @param \code{fExpr} an expression or a function object
-#' @param \code{x.mu} named vector of mean values 
-#'                    with names compatible with \code{fExpr}
-#' @param \code{x.u} named vector of standard uncertainty values 
-#' @param \code{X} a MxN matrix of M values for N input variables
-#' @param \code{Y} a vector of values corresponding to \code{X}
-#' @param \code{budgetTable} whether the budget table is computed
-#' @param \code{silent} whether gumCV executes without printout
+#' @param fExpr An expression or a function object.
+#' @param x.mu Named vector of mean values 
+#'             with names compatible with \code{fExpr}.
+#' @param x.u Named vector of standard uncertainty values. 
+#' @param X A \code{M}x\code{N} matrix of \code{M} values for 
+#'            \code{N} input variables.
+#' @param Y A vector of values corresponding to \code{X}.
+#' @param budgetTable Flag to compute the budget table.
+#' @param silent Flag to run without printout.
 #' 
 #' @return A list containing:
 #' \item{vg}{(vector) variance gradients}

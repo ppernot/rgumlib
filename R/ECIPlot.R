@@ -4,9 +4,9 @@
 #'@description
 #' Generates plot from sample.
 #' 
-#' @param \code{Y} a vector 
-#' @param \code{p} coverage of confidence interval
-#' @param \code{cex} graphical parameter
+#' @param Y A vector. 
+#' @param p Coverage of confidence interval.
+#' @param cex Graphical parameter.
 #' 
 #' @return A plot.
 

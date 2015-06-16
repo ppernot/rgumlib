@@ -4,8 +4,8 @@
 #'@description
 #' 2D scatterplots of the inputs/outputs sample, histograms and correlation coefficients.
 #' 
-#' @param \code{X} a MxN matrix of M values for N variables
-#' @param \code{cex} graphical parameter
+#' @param X A \code{M}x\code{N} matrix of \code{M} values for \code{N} variables.
+#' @param cex Graphical parameter.
 #' 
 #' @return A plot.
 
@@ -58,7 +58,7 @@ panel.smooth <- function (x, y, cex = 1.5, col.smooth = "red",
                           span = 2/3, iter = 3, ...) {
   maxPoints=500
   nP=min(maxPoints,length(x))
-  iSamp = seq.int(1,length(x),len=nP)
+  iSamp = seq.int(1,length(x),length.out=nP)
   x1=x[iSamp]
   y1=y[iSamp]
   green_tr=rgb(unlist(t(col2rgb("darkgreen"))),

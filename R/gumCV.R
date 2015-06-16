@@ -4,25 +4,29 @@
 #'@description
 #' Uncertainty propagation by combination of variances (GUM). 
 #' 
-#' @param \code{fExpr} an expression or a function object
-#' @param \code{x.mu} named vector of mean values 
-#'                    with names compatible with \code{fExpr}
-#' @param \code{x.u} named vector of standard uncertainty values 
-#'                   (one of {x.u, x.cov} oblig) 
-#' @param \code{x.cor} named correlation matrix between model parameters
-#' @param \code{x.cov} named variance/covariance matrix 
-#'                     between model parameters (one of {x.u, x.cov} oblig)  
-#' @param \code{budgetTable} whether the budget table is computed
-#' @param \code{silent} whether gumCV executes without printout
+#' @param fExpr An expression or a function object. For an expression,
+#'              all variables will be considered as uncertain. For a 
+#'              function the list of uncertain variables is derived
+#'              from the list of arguments.
+#' @param x.mu Named vector of mean values 
+#'              with names compatible with \code{fExpr}.
+#' @param x.u Named vector of standard uncertainty values 
+#'             (one of \{\code{x.u}, \code{x.cov}\} mandatory). 
+#' @param x.cor Named correlation matrix between model parameters
+#' @param x.cov Named variance/covariance matrix 
+#'                     between model parameters 
+#'                     (one of \{\code{x.u}, \code{x.cov}\} mandatory)  
+#' @param budgetTable Flag to controle cmputation of the budget table.
+#' @param silent Flag to execute \code{gumCV} without printout.
 #' 
 #' @return A list containing:
 #' \item{y.mu}{mean value of model}
 #' \item{y.u}{standard uncertainty of model}
 #' \item{anova}{(vector) relative contributions of parameters to y variance}
-#' \item{anovaCov}{global relative contribution of parameters covariance to y variance}
+#' \item{anovaCov}{global relative contribution of parameters covariance to \code{Y} variance}
 #' \item{budget}{(dataframe) uncertainty budget table, mostly to be printed}
 #' 
-#' @references (GUM) Evaluation of measurement data – Guide to the expression of 
+#' @references (GUM) Evaluation of measurement data - Guide to the expression of 
 #' uncertainty in measurement. JCGM 100:2008. 
 #' \url{http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf}
 #'  
