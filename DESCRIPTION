@@ -9,6 +9,6 @@ Description: Uncertainty Propagation.
 URL: URL: https://github.com/ppernot/rgumlib
 BugReports: https://github.com/ppernot/rgumlib/issues
 License: GPL-2
-Imports: sensitivity, numDeriv, mvtnorm, fields, triangle, msm
-Suggests: knitr
+Imports: sensitivity, numDeriv, mvtnorm, triangle, msm
+Suggests: knitr, fields
 VignetteBuilder: knitr

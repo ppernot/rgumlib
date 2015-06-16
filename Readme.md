@@ -1,6 +1,7 @@
 Uncertainty Propagation (GUM & GUM-Supp1) and Sensitivity Analysis
 ==================
 
+[![Travis-CI Build Status](https://travis-ci.org/ppernot/rgumlib.svg?branch=master)](https://travis-ci.org/ppernot/rgumlib)
 
 ## Install
 
