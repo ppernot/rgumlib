@@ -10,8 +10,8 @@ doGUM = function(fExpr) {
   # S = gumS1(nrun=1000, params=params, adapt=TRUE)
   S=with(params, gumS2(fExpr=fExpr,x.mu=x.mu,x.u=x.u,x.pdf=x.pdf,x.df=x.df))
   
-  # Analyse de sensibilité :
-  ## 1/ Corrélation entrées/sortie
+  # Analyse de sensibilite :
+  ## 1/ Correlation entrees/sortie
   SAPlot(cbind(S$X,S$Y))
   
   ## 2/ Parallel plot
