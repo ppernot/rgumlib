@@ -25,7 +25,7 @@ and [GUM-Supp1](http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.
 
 The package implements also various plotting functions, and tools for sensitivity analysis.
 
-It has been mostly used as a teaching package.
+It is mostly used as a teaching package.
 
 ## Want to test it before installing ?
 
