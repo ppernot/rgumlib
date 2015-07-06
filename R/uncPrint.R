@@ -33,14 +33,20 @@
 uncPrint = function(y, uy) {
   # Controlled precision output (2 digits for uy 
   # and truncate y accordingly)
-  ns=floor(log10(uy))
-  short_y=round(y/10^ns,1)
-  short_uy=round(uy/10^ns,1)
+  ns=floor(log10(uy))+1
+  short_y=round(y/10^ns,2)
+  short_uy=round(uy/10^ns,2)
   cat('\n')
   if(ns==0)
-    cat(sprintf("Y = %.1f +/- %.1f", short_y, short_uy))
+    cat(sprintf("Y = %.2f +/- %.2f", short_y, short_uy))
   else
-    cat(sprintf("Y = (%.1f +/- %.1f)*10^%d", short_y, short_uy, ns))
+    if(ns <= 2 & ns > 0)
+      if(ns == 1)
+        cat(sprintf("Y = %.1f +/- %.1f", short_y*10^ns, short_uy*10^ns))
+      else
+        cat(sprintf("Y = %.0f +/- %.0f", short_y*10^ns, short_uy*10^ns))
+    else  
+      cat(sprintf("Y = (%.2f +/- %.2f)*10^%d", short_y, short_uy, ns))
 }
 
 #' @rdname gumPrint
@@ -51,14 +57,21 @@ uncPrint = function(y, uy) {
 CIPrint = function(y, uy, p=0.95, fac=1.96) {
   # Controlled precision output (2 digits for uy 
   # and truncate y accordingly)
-  ns=floor(log10(fac*uy))
-  short_ylow_cv =round((y-fac*uy)/10^ns,1)
-  short_yhigh_cv=round((y+fac*uy)/10^ns,1)
+  ns=floor(log10(fac*uy))+1
+  short_ylow_cv =round((y-fac*uy)/10^ns,2)
+  short_yhigh_cv=round((y+fac*uy)/10^ns,2)
   if(ns==0)
-    cat(sprintf("\n%d percent C.I. = [%.1f,%.1f]",
+    cat(sprintf("\n%d percent C.I. = [%.2f, %.2f]",
                 100.0*p,short_ylow_cv,short_yhigh_cv))
-  else
-    cat(sprintf("\n%d percent C.I. = [%.1f,%.1f]*10^%d",
+    if(ns <= 2 & ns > 0)
+      if(ns == 1)
+        cat(sprintf("\n%d percent C.I. = [%.1f, %.1f]",
+                    100.0*p,short_ylow_cv*10^ns,short_yhigh_cv*10^ns))
+      else
+        cat(sprintf("\n%d percent C.I. = [%.0f, %.0f]",
+                    100.0*p,short_ylow_cv*10^ns,short_yhigh_cv*10^ns))
+    else  
+      cat(sprintf("\n%d percent C.I. = [%.2f, %.2f]*10^%d",
                 100.0*p,short_ylow_cv,short_yhigh_cv,ns))
 }
 
@@ -70,13 +83,20 @@ CIPrint = function(y, uy, p=0.95, fac=1.96) {
 CIPrint1 = function(uy, y_low, y_high, p=0.95) {
   # Controlled precision output (2 digits for uy 
   # and truncate y accordingly)
-  ns=floor(log10(uy))
-  short_ylow_cv =round((y_low)/10^ns,1)
-  short_yhigh_cv=round((y_high)/10^ns,1)
+  ns=floor(log10(uy))+1
+  short_ylow_cv =round((y_low)/10^ns,2)
+  short_yhigh_cv=round((y_high)/10^ns,2)
   if(ns==0)
-    cat(sprintf("\n%d percent C.I. = [%.1f,%.1f]",
+    cat(sprintf("\n%d percent C.I. = [%.2f, %.2f]",
                 100.0*p,short_ylow_cv,short_yhigh_cv))
-  else
-    cat(sprintf("\n%d percent C.I. = [%.1f,%.1f]*10^%d",
+  if(ns <= 2 & ns > 0)
+    if(ns == 1)
+      cat(sprintf("\n%d percent C.I. = [%.1f, %.1f]",
+                  100.0*p,short_ylow_cv*10^ns,short_yhigh_cv*10^ns))
+    else
+      cat(sprintf("\n%d percent C.I. = [%.0f, %.0f]",
+                100.0*p,short_ylow_cv*10^ns,short_yhigh_cv*10^ns))
+  else  
+    cat(sprintf("\n%d percent C.I. = [%.2f, %.2f]*10^%d",
                 100.0*p,short_ylow_cv,short_yhigh_cv,ns))
 }
