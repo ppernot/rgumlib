@@ -6,7 +6,7 @@
 \title{Generate Sample}
 \usage{
 xSample(M = 1000, x.mu, x.u, x.pdf, x.df, x.cor = diag(length(x.mu)),
-  x.cov = NULL)
+  x.cov = NULL, tol = sqrt(.Machine$double.eps))
 }
 \arguments{
 \item{M}{Sample size.}
@@ -24,7 +24,10 @@ with names compatible with \code{fExpr}.}
 \item{x.cor}{Named correlation matrix between model parameters.}
 
 \item{x.cov}{Named variance/covariance matrix between model parameters
-           (one of \{\code{x.u}, \code{x.cov}\} mandatory).}
+(one of \{\code{x.u}, \code{x.cov}\} mandatory).}
+
+\item{tol}{Numeric tolerance level to check positive-definiteness of
+                   \code{x.cor} or \code{x.cov}.}
 }
 \value{
 \code{X} A \code{M}*\code{N} matrix of \code{M} values for \code{N}

@@ -15,9 +15,11 @@
 #' @param x.cor Named correlation matrix between model parameters
 #' @param x.cov Named variance/covariance matrix 
 #'                     between model parameters 
-#'                     (one of \{\code{x.u}, \code{x.cov}\} mandatory)  
+#'                     (one of \{\code{x.u}, \code{x.cov}\} mandatory).  
 #' @param budgetTable Flag to controle cmputation of the budget table.
 #' @param silent Flag to execute \code{gumCV} without printout.
+#' @param tol Numeric tolerance level to check positive-definiteness of 
+#'                    \code{x.cor} or \code{x.cov}. 
 #' 
 #' @return A list containing:
 #' \item{y.mu}{mean value of model}
@@ -34,33 +36,8 @@
 #' 
 
 gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL, 
-                  budgetTable = TRUE, silent=FALSE) {
-  if (missing(fExpr)) {
-    print('\nGUM combination of variances method for model fExpr',quote=F)
-    print(" ",quote=F)
-    print("Call   : gumCV(fExpr,x.mu, x.u, x.cor, x.cov, budgetTable, silent)",
-          quote=F)
-    print("-fExpr : (oblig) an expression or a function object",quote=F)
-    print("-x.mu  : (oblig) named vector of mean values",quote=F)
-    print("         with names compatible with fExpr",quote=F)
-    print("-x.u   : (one of {x.u, x.cov} oblig) named vector of standard",quote=F)
-    print("         uncertainty values",quote=F)
-    print("-x.cor : (matrix, def=NULL) named correlation matrix between model parameters",
-          quote=F)
-    print("-x.cov : (one of {x.u, x.cov} oblig) names variance/covariance matrix",quote=F)    
-    print("         between model parameters",quote=F) 
-    print("-budgetTable : (logical, def=TRUE) whether the budget table is computed",quote=F) 
-    print("-silent : (logical, def=FALSE) whether gumCV executes without printout",quote=F) 
-    print(" ",quote=F)
-    print('Returns: list(y.mu, y.u, anova, anovaCov, budget)',quote=F)
-    print("-y.mu  : mean value of model",quote=F)
-    print("-y.u   : standard uncertainty of model",quote=F)
-    print("-anova : (vector) relative contributions of parameters to y variance",quote=F)
-    print("-anovaCov : global relative contribution of parameters covariance",quote=F)
-    print("-        to y variance",quote=F)
-    print("-budget: (dataframe) uncertainty budget table, mostly to be printed",quote=F)
-    return(invisible())
-  }
+                  budgetTable = TRUE, silent=FALSE, tol=sqrt(.Machine$double.eps)) {
+
   # Check data consistency
   locL = length(x.mu)  
   locX = as.list(x.mu)
@@ -91,13 +68,11 @@ gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL,
 
   # Covariance matrix
   if(is.null(x.cov)) {
-    if (min(eigen(x.cor, symmetric=TRUE, only.values=TRUE)$values) < 
-          sqrt(.Machine$double.eps))
+    if (min(eigen(x.cor, symmetric=TRUE, only.values=TRUE)$values) < tol )
       stop("Supplied correlation matrix is not postitive definite\n")
     V = outer(x.u, x.u, "*")*x.cor
   } else {
-    if (min(eigen(x.cov, symmetric=TRUE, only.values=TRUE)$values) < 
-          sqrt(.Machine$double.eps))
+    if (min(eigen(x.cov, symmetric=TRUE, only.values=TRUE)$values) < tol )
       stop("Supplied var/covar matrix is not postitive definite\n")
     V = x.cov
   }

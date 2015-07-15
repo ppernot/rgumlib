@@ -5,7 +5,7 @@
 \title{Combination of Variances}
 \usage{
 gumCV(fExpr, x.mu, x.u, x.cor = diag(length(x.mu)), x.cov = NULL,
-  budgetTable = TRUE, silent = FALSE)
+  budgetTable = TRUE, silent = FALSE, tol = sqrt(.Machine$double.eps))
 }
 \arguments{
 \item{fExpr}{An expression or a function object. For an expression,
@@ -23,11 +23,14 @@ with names compatible with \code{fExpr}.}
 
 \item{x.cov}{Named variance/covariance matrix
 between model parameters
-(one of \{\code{x.u}, \code{x.cov}\} mandatory)}
+(one of \{\code{x.u}, \code{x.cov}\} mandatory).}
 
 \item{budgetTable}{Flag to controle cmputation of the budget table.}
 
 \item{silent}{Flag to execute \code{gumCV} without printout.}
+
+\item{tol}{Numeric tolerance level to check positive-definiteness of
+                   \code{x.cor} or \code{x.cov}.}
 }
 \value{
 A list containing:

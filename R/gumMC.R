@@ -74,41 +74,6 @@ gumS1 = function(fExpr,x.mu,x.u,x.pdf,x.df,x.cor=diag(length(x.mu)),x.cov=NULL,
                  nrun=1000, adapt=FALSE, ndig=1, p=0.95, delFrac=1, stdev=TRUE, 
                  interval=TRUE, silent=FALSE, nrunMax=1e6) {
   
-   if (missing(fExpr)) {
-     print('\nGUM Supp.1 Monte Carlo Uncertainty Propagation method for model fExpr',quote=F)
-     print(" ",quote=F)     
-     print("Call   : gumS1(fExpr, x.mu, x.u, x.pdf, x.df, nrun, adapt,",quote=F)
-     print("               stdev, ndig, p, delFrac, interval, silent)",quote=F)
-     print(" ",quote=F)
-     print("-fExpr : (oblig) an expression or a function object",quote=F)
-     print("-x.mu  : (oblig) named vector of mean values",quote=F)
-     print("         with names compatible with fExpr",quote=F)
-     print("-x.u   : (oblig) named vector of standard uncertainty values",quote=F)
-     print("-x.pdf : (oblig) named vector of pdf types (norm, unif, stud...) ",quote=F)
-     print("-x.df  : (opt.) named vector of degrees of freedom for x.pdf",quote=F)
-     print("-x.cor : (matrix, def=NULL) named correlation matrix between model parameters",quote=F)
-     print("-x.cov : (one of {x.u, x.cov} oblig) names variance/covariance matrix",quote=F)    
-     print("         between model parameters",quote=F) 
-     print("-nrun  : (integ, def=1000) number of runs in each sample packet",quote=F)
-     print("-adapt : (logical, def=FALSE) whether use the sequential adaptive method",quote=F)
-     print("-ndig  : (integ, def=1) number of significant figures to converge",quote=F)
-     print("-p     : (real, def=0.95) coverage of confidence interval",quote=F)
-     print("-stdev : (logical, def=TRUE) whether to converge standard deviation",quote=F)
-     print("-interval : (logical, def=TRUE) whether to converge confidence interval",quote=F)
-     print("-silent: (logical, def=FALSE) wether gumCV executes without printout",quote=F) 
-     print("-nrunMaxc: (integ, def=1e6) maximum number of runs allowed",quote=F) 
-     print(" ",quote=F)
-     print('Returns: list(y.mu, y.u, y.low, y.high, p, X, Y)',quote=F)  
-     print("-y.mu  : mean value of model",quote=F)
-     print("-y.u   : standard uncertainty of model",quote=F)
-     print("-y.low : lower limit of confidence interval",quote=F)
-     print("-y.high: upper limit of confidence interval",quote=F)
-     print("-p     : coverage of confidence interval (same as input)",quote=F)
-     print("-X     : (matrix) sample of inputs used to converge statistics",quote=F)
-     print("-Y     : (vector) sample of outputs corresponding to X",quote=F)     
-     return(invisible())
-   }
-
    # b) coverage interval probability and number of MC trials
    M=nrun
    if(interval) {
@@ -220,39 +185,6 @@ gumS1 = function(fExpr,x.mu,x.u,x.pdf,x.df,x.cor=diag(length(x.mu)),x.cov=NULL,
 
 gumS2 = function(fExpr,x.mu,x.u,x.pdf,x.df,x.cor=diag(length(x.mu)),x.cov=NULL, 
                  nrun=100, h1=30,ndig=1, p=0.95, silent=FALSE, nrunMax=1e6) {
-  
-  if (missing(fExpr)) {
-    print('\nGUM Supp.1 Monte Carlo Uncertainty Propagation method for model fExpr',quote=F)
-    print('Adaptive procedure base on two-steps Stein method',quote=F)
-    print('cf. [Wubbeler et al. (2010) Metrologia 47:317]',quote=F)
-    print(" ",quote=F)     
-    print("Call  : gumS2(fExpr, x.mu, x.u, x.pdf, x.df, nrun, h1, ndig , p, silent)",quote=F)
-    print("-fExpr : (oblig) an expression or a function object",quote=F)
-    print("-x.mu  : (oblig) named vector of mean values",quote=F)
-    print("         with names compatible with fExpr",quote=F)
-    print("-x.u   : (oblig) named vector of standard uncertainty values",quote=F)
-    print("-x.pdf : (oblig) named vector of pdf types (norm, unif, stud...) ",quote=F)
-    print("-x.df  : (opt.) named vector of degrees of freedom for x.pdf",quote=F)
-    print("-x.cor : (matrix, def=NULL) named correlation matrix between model parameters",quote=F)
-    print("-x.cov : (one of {x.u, x.cov} oblig) names variance/covariance matrix",quote=F)    
-    print("         between model parameters",quote=F) 
-    print("-nrun  : (integ, def=100) number of runs in each sample packet",quote=F)
-    print("-h1    : (integ, def=30) number of packets in first step",quote=F)
-    print("-ndig  : (integ, def=1) number of significant figures to converge",quote=F)
-    print("-p     : (real, def=0.95) coverage of confidence interval",quote=F)
-    print("-silent: (logical, def=FALSE) wether gumCV executes without printout",quote=F) 
-    print("-nrunMax: (integ, def=1e6) maximum number of runs allowed",quote=F) 
-    print(" ",quote=F)
-    print('Returns: list(y.mu, y.u, y.low, y.high, p, X, Y)',quote=F)  
-    print("-y.mu  : mean value of model",quote=F)
-    print("-y.u   : standard uncertainty of model",quote=F)
-    print("-y.low : lower limit of confidence interval",quote=F)
-    print("-y.high: upper limit of confidence interval",quote=F)
-    print("-p     : coverage of confidence interval (same as input)",quote=F)
-    print("-X     : (matrix) sample of inputs used to converge statistics",quote=F)
-    print("-Y     : (vector) sample of outputs corresponding to X",quote=F)     
-    return(invisible())
-  }
   
   if(!silent) {
     cat('\n*** Monte Carlo Uncertainty Propagation:\n')

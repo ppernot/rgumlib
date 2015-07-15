@@ -15,7 +15,9 @@
 #' @param x.cor Named correlation matrix between model parameters.
 #' @param x.cov Named variance/covariance matrix between model parameters 
 #'            (one of \{\code{x.u}, \code{x.cov}\} mandatory).
-#'             
+#' @param tol Numeric tolerance level to check positive-definiteness of 
+#'                    \code{x.cor} or \code{x.cov}. 
+#'                                 
 #' @return 
 #' \code{X} A \code{M}*\code{N} matrix of \code{M} values for \code{N} 
 #'          variables.
@@ -47,37 +49,14 @@
 #' SAPlot(X)
 #' @export
 xSample = function (M=1000,x.mu,x.u,x.pdf,x.df,
-                    x.cor=diag(length(x.mu)),x.cov=NULL) {
-  if (missing(M)) {
-    print('Generate MC sample from prescribed distribution',quote=F) 
-    print(" ",quote=F)     
-    print("Call   : xSample(M, x.mu, x.u, x.pdf, x.df, x.cor)",quote=F)
-    print("-M     : (integ, def=1000) number of points in sample",quote=F)
-    print("-x.mu  : (oblig) named vector of mean values",quote=F)
-    print("-x.u   : (oblig) named vector of standard uncertainty values",quote=F)
-    print("-x.pdf : (oblig) named vector of pdf types:",quote=F)
-    print("         'delta' Dirac delta distribution for constants",quote=F)
-    print("         'norm'  Normal",quote=F)
-    print("         'tnorm' Truncated normal (positive values)",quote=F)
-    print("         'lnorm' Lognormal",quote=F)
-    print("         'stud'  Student's T",quote=F)
-    print("         'unif'  Uniform",quote=F)
-    print("         'triangle' Symmetric triangular",quote=F)
-    print("         'arcsine' Arcsine derivative",quote=F)
-    print("-x.df  : (opt.) named vector of degrees of freedom for x.pdf",quote=F)
-    print("-x.cor : (matrix, def=I) named correlation matrix between model parameters",
-          quote=F)
-    print("-x.cov : (one of {x.u, x.cov} oblig) names variance/covariance matrix",quote=F)    
-    print("         between model parameters",quote=F) 
-    return(invisible())
-  }
-  
+                    x.cor=diag(length(x.mu)),x.cov=NULL,
+                    tol=sqrt(.Machine$double.eps)) {
+
   np = length(x.pdf)
   sample = matrix(ncol=np,nrow=M)
   
   # Generate random sample for correlation by Gaussian copula
-  if (min(eigen(x.cor, symmetric=TRUE, 
-                only.values=TRUE)$values) < sqrt(.Machine$double.eps))
+  if (min(eigen(x.cor, symmetric=TRUE, only.values=TRUE)$values) < tol)
     stop("Correlation matrix is not postitive definite\n")
   z = mvtnorm::rmvnorm(M, mean=rep(0, np), sigma=x.cor)
   z = pnorm(z)
