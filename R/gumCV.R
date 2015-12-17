@@ -105,7 +105,7 @@ gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL,
                       Inc_Std. = sprintf("%.2e",c(x.u[selX],y.u)),
                       J = c(sprintf("%.2e",J[selX]),'<--'),
                       J2.U2 = sprintf("%.2e",c(j2u2[selX],y.u^2)),
-                      Anova = c(sprintf("%.2f",anova[selX]),""),
+                      Contrib. = c(sprintf("%.2f",anova[selX]),""),
                       stringsAsFactors = FALSE)  
     rownames(budget) = c(x.names[selX],'Y')
     
@@ -113,7 +113,7 @@ gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL,
       # Insert covariances contribution into budget table
       covLine=data.frame(Valeur='', Inc_Std.='', J='',
                          J2.U2 = sprintf("%.2e",yu2-sum(j2u2)),
-                         Anova = sprintf("%.2f",anovaCov),
+                         Contrib. = sprintf("%.2f",anovaCov),
                          stringsAsFactors = FALSE)
       l=nrow(budget)
       budget=rbind(budget[-l,],covLine,budget[l,])
