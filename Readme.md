@@ -11,7 +11,7 @@ You can install this package in R from GitHub by executing
 install.packages("devtools")
 devtools::install_github("ppernot/rgumlib")
 ```
-and load it the usual way
+in the R console, and load it the usual way
 
 ```r
 library("rgumlib")
