@@ -15,7 +15,7 @@ CIPrint1(uy, y_low, y_high, p = 0.95)
 \arguments{
 \item{y}{Mean value.}
 
-\item{uy}{Standard uncertainty on \code{Y}.}
+\item{uy}{Standard uncertainty on \code{Y}. Should be strictly positive.}
 
 \item{p}{Coverage of confidence interval.}
 

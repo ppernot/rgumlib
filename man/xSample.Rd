@@ -35,12 +35,12 @@ with names compatible with \code{fExpr}.}
 }
 \description{
 Generate Monte Carlo sample from prescribed PDF. 
-All PDFs are parameterized by their mean and standard deviation.
+All PDFs are parameterized by their mean and standard deviation (if needed).
 }
 \details{
 Available distributions:
 \itemize{
-\item{'delta'} {Dirac delta distribution for constants; args = x.mu}
+\item{'delta'} {Dirac delta distribution (for constants); args = x.mu}
 \item{'norm'} {Normal; args = x.mu, x.u}
 \item{'tnorm'} {Truncated normal (positive values); args = x.mu, x.u}
 \item{'lnorm'} {Lognormal; args = x.mu, x.u}
