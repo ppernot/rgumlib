@@ -11,7 +11,7 @@
 #'from interval limits.
 
 #'@param y Mean value.
-#'@param uy Standard uncertainty on \code{Y}.
+#'@param uy Standard uncertainty on \code{Y}. Should be strictly positive.
 #'@param p Coverage of confidence interval.
 #'@param fac Enlargment factor corresponding to \code{p}.
 #'@param y_low,y_high Lower and upper limits of coverage interval.
@@ -33,6 +33,10 @@
 uncPrint = function(y, uy) {
   # Controlled precision output (2 digits for uy 
   # and truncate y accordingly)
+  if (uy <= 0) {
+    cat('Sorry: cannot pretty print with negative or null uncertainty !\n')
+    return
+  }
   ns=floor(log10(uy))+1
   short_y=round(y/10^ns,2)
   short_uy=round(uy/10^ns,2)
@@ -57,6 +61,10 @@ uncPrint = function(y, uy) {
 CIPrint = function(y, uy, p=0.95, fac=1.96) {
   # Controlled precision output (2 digits for uy 
   # and truncate y accordingly)
+  if (uy <= 0) {
+    cat('Sorry: cannot pretty print with negative or null uncertainty !\n')
+    return
+  }
   ns=floor(log10(fac*uy))+1
   short_ylow_cv =round((y-fac*uy)/10^ns,2)
   short_yhigh_cv=round((y+fac*uy)/10^ns,2)
@@ -83,6 +91,10 @@ CIPrint = function(y, uy, p=0.95, fac=1.96) {
 CIPrint1 = function(uy, y_low, y_high, p=0.95) {
   # Controlled precision output (2 digits for uy 
   # and truncate y accordingly)
+  if (uy <= 0) {
+    cat('Sorry: cannot pretty print with negative or null uncertainty !\n')
+    return
+  }
   ns=floor(log10(uy))+1
   short_ylow_cv =round((y_low)/10^ns,2)
   short_yhigh_cv=round((y_high)/10^ns,2)

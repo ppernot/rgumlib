@@ -3,7 +3,7 @@
 #'
 #'@description
 #' Generate Monte Carlo sample from prescribed PDF. 
-#' All PDFs are parameterized by their mean and standard deviation.
+#' All PDFs are parameterized by their mean and standard deviation (if needed).
 #'
 #' @param M Sample size. 
 #' @param x.mu Named vector of mean values 
@@ -25,7 +25,7 @@
 #' @details 
 #' Available distributions:
 #' \itemize{
-#' \item{'delta'} {Dirac delta distribution for constants; args = x.mu}
+#' \item{'delta'} {Dirac delta distribution (for constants); args = x.mu}
 #' \item{'norm'} {Normal; args = x.mu, x.u}
 #' \item{'tnorm'} {Truncated normal (positive values); args = x.mu, x.u}
 #' \item{'lnorm'} {Lognormal; args = x.mu, x.u}
@@ -33,6 +33,7 @@
 #' \item{'unif'} {Uniform; args = x.mu, x.u}
 #' \item{'triangle'} {Symmetric triangular; args = x.mu, x.u}
 #' \item{'arcsine'} {Arcsine derivative; args = x.mu, x.u}
+#' \item{'pois'} {Poisson; args = x.mu}
 #' }
 #' 
 #' Correlation between variables is described by matrices \code{x.cov}
@@ -75,6 +76,7 @@ xSample = function (M=1000,x.mu,x.u,x.pdf,x.df,
                unif  = 'qunif(z[,ip],min=av-sd*3^0.5,max=av+sd*3^0.5)',
                triangle = 'triangle::qtriangle(z[,ip],a=av-sd*6^0.5,b=av+sd*6^0.5)',
                arcsine = 'qarcsine(z[,ip],a=av-sd*2^0.5,b=av+sd*2^0.5)',
+               pois  = 'qpois(z[1:M,ip],lambda=av)',
                default= NULL
     )
     if(is.null(pdf))

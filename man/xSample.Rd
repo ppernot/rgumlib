@@ -48,6 +48,7 @@ Available distributions:
 \item{'unif'} {Uniform; args = x.mu, x.u}
 \item{'triangle'} {Symmetric triangular; args = x.mu, x.u}
 \item{'arcsine'} {Arcsine derivative; args = x.mu, x.u}
+\item{'pois'} {Poisson; args = x.mu}
 }
 
 Correlation between variables is described by matrices \code{x.cov}
