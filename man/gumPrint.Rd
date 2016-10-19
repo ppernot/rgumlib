@@ -3,10 +3,13 @@
 \name{uncPrint}
 \alias{CIPrint}
 \alias{CIPrint1}
+\alias{UncPrint}
 \alias{uncPrint}
 \title{Printing Functions}
 \usage{
-uncPrint(y, uy)
+uncPrint(y, uy, numDig = 2)
+
+UncPrint(y, uy, fac = 2)
 
 CIPrint(y, uy, p = 0.95, fac = 1.96)
 
@@ -17,9 +20,9 @@ CIPrint1(uy, y_low, y_high, p = 0.95)
 
 \item{uy}{Standard uncertainty on \code{Y}. Should be strictly positive.}
 
-\item{p}{Coverage of confidence interval.}
-
 \item{fac}{Enlargment factor corresponding to \code{p}.}
+
+\item{p}{Coverage of confidence interval.}
 
 \item{y_low, y_high}{Lower and upper limits of coverage interval.}
 }
@@ -28,10 +31,12 @@ A character string.
 }
 \description{
 Print results with prescribed number of
-digits.
+digits following GUM recommendations.
 
 \code{uncPrint()} is used to print the mean value and
-(enlarged) standard uncertainty.
+standard uncertainty.
+\code{UncPrint()} is used to print the mean value and
+enlarged uncertainty.
 \code{CIPrint()} is used to print coverage intervals 
 from mean value, standard uncertainty and coverage factor.
 \code{CIPrint1()} is used to print coverage intervals 
@@ -44,6 +49,8 @@ x.u = c(0.1,0.1); names(x.u)=c('x1','x2')
 x.pdf = c('unif','triangle'); names(x.pdf)=c('x1','x2')
 S=gumS1(fExpr,x.mu,x.u,x.pdf,x.df=NULL,nrunMax=1000)
 uncPrint(S$y.mu,S$y.u)
+#
+UncPrint(S$y.mu,2*S$y.u,fac=2)
 #
 CIPrint(S$y.mu,S$y.u)
 #
