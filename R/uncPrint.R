@@ -32,8 +32,11 @@
 #' S=gumS1(fExpr,x.mu,x.u,x.pdf,x.df=NULL,nrunMax=1000)
 #' uncPrint(S$y.mu,S$y.u)
 #' @export
-uncPrint = function(y, uy, numDig=2) {
+uncPrint = function(y, uy) {
   # Print result + uncertainty in parenthesis format 
+  
+  # number of significant digits on uncertainty
+  numDig = 2
   
   if (uy <= 0) {
     cat('Sorry: cannot pretty print with negative or null uncertainty !\n')
@@ -56,7 +59,7 @@ uncPrint = function(y, uy, numDig=2) {
          },
          {    
            fmt = paste0("%",n0,".0f")
-           short_uy = signif(uy/10^(n1-numDig+1),numDig)
+           short_uy = signif(uy/10^(n1-numDig+1),numDig)*10^(n1-numDig+1)
          }
   )
   short_y  = sprintf(fmt, y)

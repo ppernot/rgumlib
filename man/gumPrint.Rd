@@ -7,7 +7,7 @@
 \alias{uncPrint}
 \title{Printing Functions}
 \usage{
-uncPrint(y, uy, numDig = 2)
+uncPrint(y, uy)
 
 UncPrint(y, uy, fac = 2)
 
