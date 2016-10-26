@@ -69,29 +69,30 @@ uncPrint = function(y, uy) {
 #' @rdname gumPrint
 #' @examples
 #' #
-#' UncPrint(S$y.mu,2*S$y.u,fac=2)
+#' UncPrint(S$y.mu,y.u,fac=2)
 #' @export
 UncPrint = function(y, uy, fac=2) {
-  # Controlled precision output of enlarged uncertainty (2 digits for uy 
+  # Controlled precision output of enlarged uncertainty (2 digits for Uy=fac*uy 
   # and truncate y accordingly)
   if (uy <= 0) {
     cat('Sorry: cannot pretty print with negative or null uncertainty !\n')
     return
   }
-  ns=floor(log10(uy))+1
+  Uy = fac*uy
+  ns=floor(log10(Uy))+1
   short_y=round(y/10^ns,2)
-  short_uy=round(uy/10^ns,2)
+  short_Uy=round(Uy/10^ns,2)
   cat('\n')
   if(ns==0) {
-    cat(sprintf("Y = %.2f +/- %.2f", short_y, short_uy))
+    cat(sprintf("Y = %.2f +/- %.2f", short_y, short_Uy))
   } else {
     if(ns <= 2 & ns > 0) {
       if(ns == 1)
-        cat(sprintf("Y = %.1f +/- %.1f", short_y*10^ns, short_uy*10^ns))
+        cat(sprintf("Y = %.1f +/- %.1f", short_y*10^ns, short_Uy*10^ns))
       else
-        cat(sprintf("Y = %.0f +/- %.0f", short_y*10^ns, short_uy*10^ns))
+        cat(sprintf("Y = %.0f +/- %.0f", short_y*10^ns, short_Uy*10^ns))
     } else {
-      cat(sprintf("Y = (%.2f +/- %.2f)*10^%d", short_y, short_uy, ns))
+      cat(sprintf("Y = (%.2f +/- %.2f)*10^%d", short_y, short_Uy, ns))
     }  
   }
   cat(sprintf("; k = %.2f", fac))
