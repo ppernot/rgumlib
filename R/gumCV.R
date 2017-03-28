@@ -102,7 +102,7 @@ gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL,
     selX = x.u != 0 # exclude constant params
     budget=data.frame(
                       Valeur = sprintf("%.3e",c(x.mu[selX],y.mu)),
-                      Inc_Std. = sprintf("%.2e",c(x.u[selX],y.u)),
+                      Inc_Type = sprintf("%.2e",c(x.u[selX],y.u)),
                       J = c(sprintf("%.2e",J[selX]),'<--'),
                       J2.U2 = sprintf("%.2e",c(j2u2[selX],y.u^2)),
                       Contrib. = c(sprintf("%.2f",anova[selX]),""),
