@@ -111,7 +111,9 @@ gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL,
     
     if(abs(anovaCov) > 2*.Machine$double.eps) {
       # Insert covariances contribution into budget table
-      covLine=data.frame(Valeur='', Inc_Std.='', J='',
+      covLine=data.frame(Valeur='', 
+                         Inc_Type.='', 
+                         J='',
                          J2.U2 = sprintf("%.2e",yu2-sum(j2u2)),
                          Contrib. = sprintf("%.2f",anovaCov),
                          stringsAsFactors = FALSE)
