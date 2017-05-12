@@ -69,7 +69,7 @@ vgSA = function (fExpr, x.mu, x.u, X, Y, budgetTable = TRUE, silent=FALSE) {
                 ncol=ncol(Xc),nrow=nrow(Xc),byrow=FALSE)
   y.mu = mean(Y)
   varY = var(Y)
-  vg = colMeans(Yc*tabDeriv*Xc)/varY
+  vg = colMeans(Yc*tabDeriv*Xc)/rep(varY,L)
   
   budget = NA
   if(budgetTable) {
