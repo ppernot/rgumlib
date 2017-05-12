@@ -27,4 +27,3 @@ x.pdf = c('unif','triangle'); names(x.pdf)=c('x1','x2')
 S=gumS1(fExpr,x.mu,x.u,x.pdf,x.df=NULL,nrunMax=1000)
 parPlot(cbind(S$X,S$Y))
 }
-

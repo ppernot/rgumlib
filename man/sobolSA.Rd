@@ -43,4 +43,3 @@ x.u = c(0.1,0.1); names(x.u)=c('x1','x2')
 x.pdf = c('unif','triangle'); names(x.pdf)=c('x1','x2')
 sobolSA(fExpr,x.mu,x.u,x.pdf)
 }
-

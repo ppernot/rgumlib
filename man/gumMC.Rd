@@ -3,6 +3,7 @@
 \name{gumS1}
 \alias{gumS1}
 \alias{gumS2}
+\alias{gumS2}
 \title{Combination of Distributions by Monte Carlo}
 \usage{
 gumS1(fExpr, x.mu, x.u, x.pdf, x.df, x.cor = diag(length(x.mu)),
@@ -101,4 +102,3 @@ in the application of a Monte Carlo method for uncertainty evaluation.
 \emph{Metrologia} \strong{47}:317. 
 \href{http://dx.doi.org/10.1088/0026-1394/47/3/023}{CrossRef}
 }
-

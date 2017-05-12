@@ -45,4 +45,3 @@ Mark Campanelli, Raghu Kacker and R\"udiger Kessel (2013)
 Variance gradients and uncertainty budgets for nonlinear measurement 
 functions with independent inputs. \emph{Meas. Sci. Technol.} \strong{24}:25002.
 }
-

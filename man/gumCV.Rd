@@ -48,4 +48,3 @@ Uncertainty propagation by combination of variances (GUM).
 uncertainty in measurement. JCGM 100:2008. 
 \url{http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf}
 }
-

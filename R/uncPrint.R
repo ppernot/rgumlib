@@ -69,7 +69,7 @@ uncPrint = function(y, uy) {
 #' @rdname gumPrint
 #' @examples
 #' #
-#' UncPrint(S$y.mu,y.u,fac=2)
+#' UncPrint(S$y.mu,S$y.u,fac=2)
 #' @export
 UncPrint = function(y, uy, fac=2) {
   # Controlled precision output of enlarged uncertainty (2 digits for Uy=fac*uy 

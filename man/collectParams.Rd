@@ -42,4 +42,3 @@ G = with(params,
          gumCV(fExpr=fExpr,x.mu=x.mu,x.u=x.u)
          )
 }
-

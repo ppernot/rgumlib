@@ -5,6 +5,9 @@
 \alias{parcsine}
 \alias{qarcsine}
 \alias{rarcsine}
+\alias{parcsine}
+\alias{qarcsine}
+\alias{rarcsine}
 \title{The Arcsine Distribution}
 \usage{
 darcsine(x, a = 0, b = 1)
@@ -34,4 +37,3 @@ parcsine(seq(-pi,pi,by=0.1), a=-pi, b=pi)
 qarcsine(seq(0,1,by=0.1), a=-pi, b=pi)
 rarcsine(10)
 }
-
