@@ -46,13 +46,16 @@ gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL,
   if(is.null(names(locX))) names(locX)=paste0('X',1:locL)
   
   # Get variables names in fExpr
-  var.names= if(class(fExpr)=='function') names(formals(fExpr)) else all.vars(fExpr)
+  var.names= if(class(fExpr)=='function') 
+              names(formals(fExpr)) 
+             else 
+               all.vars(fExpr)
   
   # Check names compatibility 
   x.names=names(locX)
   if(!all(x.names %in% var.names))
     stop('x.mu variables names not consistent with fExpr')
-    
+  
   # Sensitivities and mean value
   if (class(fExpr)=='function') {
     # Derivation numerique
@@ -65,7 +68,7 @@ gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL,
     y.mu  = eval(fExpr,locX)
     J = as.vector(attr(df, "gradient"))
   }
-
+  
   # Covariance matrix
   if(is.null(x.cov)) {
     if (min(eigen(x.cor, symmetric=TRUE, only.values=TRUE)$values) < tol )
@@ -76,7 +79,7 @@ gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL,
       stop("Supplied var/covar matrix is not postitive definite\n")
     V = x.cov
   }
-     
+  
   # Combinaison des variances
   y.u = (t(J) %*% V %*% J)^0.5
   
@@ -93,7 +96,7 @@ gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL,
   names(anova)=x.names
   anovaCov=0
   if(yu2 !=0 ) {
-    anova = j2u2/yu2
+    anova = j2u2 / rep(yu2,length(x.mu))
     anovaCov = 1-sum(anova)
   }
   
@@ -101,21 +104,21 @@ gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL,
     #Build budget table   
     selX = x.u != 0 # exclude constant params
     budget=data.frame(
-                      Valeur = sprintf("%.3e",c(x.mu[selX],y.mu)),
-                      Inc_Type = sprintf("%.2e",c(x.u[selX],y.u)),
-                      J = c(sprintf("%.2e",J[selX]),'<--'),
-                      J2.U2 = sprintf("%.2e",c(j2u2[selX],y.u^2)),
-                      Contrib. = c(sprintf("%.2f",anova[selX]),""),
-                      stringsAsFactors = FALSE)  
+      Valeur = sprintf("%.3e",c(x.mu[selX],y.mu)),
+      Inc_Type = sprintf("%.2e",c(x.u[selX],y.u)),
+      J = c(sprintf("%.2e",J[selX]),'<--'),
+      J2.U2 = sprintf("%.2e",c(j2u2[selX],y.u^2)),
+      ANOVA = c(sprintf("%.2f",anova[selX]),""),
+      stringsAsFactors = FALSE)  
     rownames(budget) = c(x.names[selX],'Y')
     
     if(abs(anovaCov) > 2*.Machine$double.eps) {
       # Insert covariances contribution into budget table
       covLine=data.frame(Valeur='', 
-                         Inc_Type.='', 
+                         Inc_Type='', 
                          J='',
                          J2.U2 = sprintf("%.2e",yu2-sum(j2u2)),
-                         Contrib. = sprintf("%.2f",anovaCov),
+                         ANOVA = sprintf("%.2f",anovaCov),
                          stringsAsFactors = FALSE)
       l=nrow(budget)
       budget=rbind(budget[-l,],covLine,budget[l,])
@@ -123,12 +126,12 @@ gumCV = function (fExpr, x.mu, x.u, x.cor=diag(length(x.mu)),x.cov=NULL,
       
     } 
     if(!silent) print(budget,right=FALSE)
-
-    } else {
+    
+  } else {
     budget = NA
     
   }      
-
+  
   return( list(y.mu=y.mu, y.u=y.u[1,1], anova=anova, 
                anovaCov=anovaCov, budget=budget) )     
 }

@@ -57,8 +57,11 @@ xSample = function (M=1000,x.mu,x.u,x.pdf,x.df,
   sample = matrix(ncol=np,nrow=M)
   
   # Generate random sample for correlation by Gaussian copula
+  if(!is.null(x.cov)) x.cor = cov2cor(x.cov) # Use covmat if present
+  
   if (min(eigen(x.cor, symmetric=TRUE, only.values=TRUE)$values) < tol)
     stop("Correlation matrix is not postitive definite\n")
+  
   z = mvtnorm::rmvnorm(M, mean=rep(0, np), sigma=x.cor)
   z = pnorm(z)
   
