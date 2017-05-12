@@ -69,112 +69,112 @@
 #' S=gumS1(fExpr,x.mu,x.u,x.pdf,x.df=NULL,nrunMax=1000)
 #' pairs(cbind(S$X,S$Y))
 #' @export
-  
+
 gumS1 = function(fExpr,x.mu,x.u,x.pdf,x.df,x.cor=diag(length(x.mu)),x.cov=NULL, 
                  nrun=1000, adapt=FALSE, ndig=1, p=0.95, delFrac=1, stdev=TRUE, 
                  interval=TRUE, silent=FALSE, nrunMax=1e6) {
   
-   # b) coverage interval probability and number of MC trials
-   M=nrun
-   if(interval) {
-     alpha=(1-p)/2
-     if (adapt) M=max(ceiling(100/(1-p)),nrun)
-   }     
-   
-   # c)
-   h=1
-   yav=c()
-   if (stdev) uy=c()
-   ytot=c()
-   xtot=c()
-   if(interval) {
-     ylow=c()
-     yhigh=c()
-   } 
-   warnMsg=NULL
-   
-   repeat {
-   
-      # d) Model evaluations
-      sample=xSample(nrun,x.mu,x.u,x.pdf,x.df,x.cor,x.cov)
-      y=fVector(sample,fExpr)
-     
-      ytot=c(ytot,y) 
-      xtot=rbind(xtot,sample)
-      if(!adapt) break
-      if(length(ytot) > nrunMax) {
-        warnMsg = paste0('Warning : max. nb of runs imposed by nrunMax=',nrunMax)
-        break
-      }
-      
-      # e) statistics
-      yav[h]=mean(y)
-      if(stdev) uy[h]=sd(y)
+  # b) coverage interval probability and number of MC trials
+  M=nrun
+  if(interval) {
+    alpha=(1-p)/2
+    if (adapt) M=max(ceiling(100/(1-p)),nrun)
+  }     
+  
+  # c)
+  h=1
+  yav=c()
+  if (stdev) uy=c()
+  ytot=c()
+  xtot=c()
+  if(interval) {
+    ylow=c()
+    yhigh=c()
+  } 
+  warnMsg=NULL
+  
+  repeat {
+    
+    # d) Model evaluations
+    sample=xSample(nrun,x.mu,x.u,x.pdf,x.df,x.cor,x.cov)
+    y=fVector(sample,fExpr)
+    
+    ytot=c(ytot,y) 
+    xtot=rbind(xtot,sample)
+    if(!adapt) break
+    if(length(ytot) > nrunMax) {
+      warnMsg = paste0('Warning : max. nb of runs imposed by nrunMax=',nrunMax)
+      break
+    }
+    
+    # e) statistics
+    yav[h]=mean(y)
+    if(stdev) uy[h]=sd(y)
+    if(interval) {
+      ylow[h]=quantile(y,probs=c(alpha),type=8)
+      yhigh[h]=quantile(y,probs=c(p+alpha),type=8)
+    }
+    
+    if (h>=2) {
+      ydev=sd(yav)/h^0.5
+      if(stdev) uydev=sd(uy)/h^0.5
       if(interval) {
-        ylow[h]=quantile(y,probs=c(alpha),type=8)
-        yhigh[h]=quantile(y,probs=c(p+alpha),type=8)
+        ylowdev=sd(ylow)/h^0.5
+        yhighdev=sd(yhigh)/h^0.5
       }
       
-      if (h>=2) {
-         ydev=sd(yav)/h^0.5
-         if(stdev) uydev=sd(uy)/h^0.5
-         if(interval) {
-           ylowdev=sd(ylow)/h^0.5
-           yhighdev=sd(yhigh)/h^0.5
-         }
-   
-         udev=sd(ytot,na.rm=T)
-         del= numtol(udev,ndig) * delFrac
-         
-#          factor = 2
-         factor = qt(0.975,h-1)
-         if(interval) {
-           if(factor*ydev <= del & 
-                factor*uydev <= del & 
-                factor*ylowdev <= del & 
-                factor*yhighdev <= del ) break 
-         } else {
-           if(stdev) {
-             if(factor*ydev <= del & 
-                  factor*uydev <= del  ) break 
-           } else {
-             if(factor*ydev <= del) break              
-           }
-         }
+      udev=sd(ytot,na.rm=T)
+      del= numtol(udev,ndig) * delFrac
+      
+      #          factor = 2
+      factor = qt(0.975,h-1)
+      if(interval) {
+        if(factor*ydev <= del & 
+           factor*uydev <= del & 
+           factor*ylowdev <= del & 
+           factor*yhighdev <= del ) break 
+      } else {
+        if(stdev) {
+          if(factor*ydev <= del & 
+             factor*uydev <= del  ) break 
+        } else {
+          if(factor*ydev <= del) break              
+        }
       }
-      h=h+1
-   }
-   
-   # Output results
-   if(!silent) {
-     cat('\n*** Monte Carlo Uncertainty Propagation:')
-     cat(sprintf("\nSample Size = %1.1e",M*h)) 
-     if(!is.null(warnMsg)) cat(paste0("\n",warnMsg))
-   }
-   
-   ym_cv=mean(ytot,na.rm=T)
-   uy_cv=sd(ytot,na.rm=T)
-   if(!silent) uncPrint(ym_cv,uy_cv)
-   
-   if(interval) { 
-     ns=floor(log10(uy_cv))-1     
-     ylow_cv=quantile(ytot,na.rm=T,probs=c(alpha),type=8)
-     yhigh_cv=quantile(ytot,na.rm=T,probs=c(p+alpha),type=8)
-     short_ylow_cv=round(ylow_cv/10^ns,0)
-     short_yhigh_cv=round(yhigh_cv/10^ns,0)
-     if(!silent) {
-       if(ns==0)
-         cat(sprintf("\n%d percent C.I. = [%d,%d]",
-                     100.0*p,short_ylow_cv,short_yhigh_cv))
-       else
-         cat(sprintf("\n%d percent C.I. = [%d,%d]*10^%d",
-                     100.0*p,short_ylow_cv,short_yhigh_cv,ns))
-     }     
-   }
-   ytot=matrix(ytot,ncol=1)
-   colnames(ytot)='Y'
-   return(list(y.mu=ym_cv, y.u=uy_cv, y.low=ylow_cv, y.high=yhigh_cv,
-               p = p, Y=ytot,X=xtot))   
+    }
+    h=h+1
+  }
+  
+  # Output results
+  if(!silent) {
+    cat('\n*** Monte Carlo Uncertainty Propagation:')
+    cat(sprintf("\nSample Size = %1.1e",M*h),"\n") 
+    if(!is.null(warnMsg)) cat(paste0("\n",warnMsg,"\n"))
+  }
+  
+  ym_cv=mean(ytot,na.rm=T)
+  uy_cv=sd(ytot,na.rm=T)
+  if(!silent) uncPrint(ym_cv,uy_cv)
+  
+  if(interval) { 
+    ns=floor(log10(uy_cv))-1     
+    ylow_cv=quantile(ytot,na.rm=T,probs=c(alpha),type=8)
+    yhigh_cv=quantile(ytot,na.rm=T,probs=c(p+alpha),type=8)
+    short_ylow_cv=round(ylow_cv/10^ns,0)
+    short_yhigh_cv=round(yhigh_cv/10^ns,0)
+    if(!silent) {
+      if(ns==0)
+        cat(sprintf("\n%d percent C.I. = [%d,%d]",
+                    100.0*p,short_ylow_cv,short_yhigh_cv))
+      else
+        cat(sprintf("\n%d percent C.I. = [%d,%d]*10^%d",
+                    100.0*p,short_ylow_cv,short_yhigh_cv,ns))
+    }     
+  }
+  ytot=matrix(ytot,ncol=1)
+  colnames(ytot)='Y'
+  return(list(y.mu=ym_cv, y.u=uy_cv, y.low=ylow_cv, y.high=yhigh_cv,
+              p = p, Y=ytot,X=xtot))   
 }
 
 #' @rdname gumMC
@@ -189,14 +189,14 @@ gumS2 = function(fExpr,x.mu,x.u,x.pdf,x.df,x.cor=diag(length(x.mu)),x.cov=NULL,
   if(!silent) {
     cat('\n*** Monte Carlo Uncertainty Propagation:\n')
   }
-
+  
   alpha=(1-p)/2
-       
+  
   # c)
   yav=c()
   ytot=c()
   xtot=c()
-
+  
   # 1rst stage
   if(!silent) cat(paste0('1st stage: ',h1,' blocks\n'))
   for (h in 1:h1) {  
@@ -206,14 +206,14 @@ gumS2 = function(fExpr,x.mu,x.u,x.pdf,x.df,x.cor=diag(length(x.mu)),x.cov=NULL,
     xtot=rbind(xtot,sample)
     yav[h]=mean(y)
   }
-
+  
   # Estimate 2nd stage sampling
   s2y = var(yav)
   udev= sd(ytot,na.rm=T)
   del = numtol(udev,ndig)
   factor = qt(1-alpha/2,h1-1)
   h2 = max(floor(s2y*factor^2/del^2)-h1+1,0)
-
+  
   warnMsg = NULL
   if((h1+h2)*nrun > nrunMax) {
     h2 = min(h2, floor(nrunMax/nrun)-h1)
@@ -235,7 +235,7 @@ gumS2 = function(fExpr,x.mu,x.u,x.pdf,x.df,x.cor=diag(length(x.mu)),x.cov=NULL,
   h=h1+h2
   
   # Output results
-  if(!silent) cat(sprintf("\nSample Size = %1.1e",nrun*h))
+  if(!silent) cat(sprintf("\nSample Size = %1.1e",nrun*h),"\n")
   
   ym_cv = mean(ytot,na.rm=T)
   uy_cv = sd(ytot,na.rm=T)
@@ -260,4 +260,3 @@ gumS2 = function(fExpr,x.mu,x.u,x.pdf,x.df,x.cor=diag(length(x.mu)),x.cov=NULL,
   return(list(y.mu=ym_cv, y.u=uy_cv, y.low=ylow_cv, y.high=yhigh_cv,
               p = p, Y=ytot, X=xtot))   
 }
-
