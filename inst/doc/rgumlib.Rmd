@@ -1,0 +1,448 @@
+---
+title: "rgumlib"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    fig_caption: yes
+    number_sections: yes
+vignette: >
+  %\VignetteIndexEntry{rgumlib}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+`rgumlib` is a set of R functions designed to perform 
+uncertainty propagation according to the 
+_GUM_^[[GUM](http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_F.pdf)] 
+and 
+_GUM-Supp1_^[[GUM-Supp1](http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.pdf)] 
+recommendations.
+
+The package implements also various plotting functions, and tools for sensitivity analysis.
+
+# Other packages
+
+`propagate`
+
+```{r, echo=FALSE, results='hide'}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(rgumlib)
+# set.seed(1234) # Initialise la graine du RNG
+```
+
+# Problem setup
+
+Let us consider the following linear model as an example:
+$$Y = X_1 + X_2$$
+where $X_1$ and $X_2$ are two uncertain variables to be defined.
+
+## Model definition
+
+The model can be defined as an expression or a function. 
+The difference is that analytic derivatives will be used 
+for expressions, whereas functions require numerical derivatives. 
+In all the examples we have been able to treat,
+this is not a choice criterion (no difference observed). 
+
+```{r}
+# Expression analytique du modele
+fExpr = expression( x1 + 2*x2 )
+# or
+fExpr = function(x1,x2) x1 + 2*x2 
+```
+
+In practice, use of a function enables more complex models, 
+for instance calls to external codes.
+
+__Warning__: the only arguments of the function should be the 
+uncertain variables and bear the same names as those used to 
+define these variables (see below).
+
+## Input variables definition
+
+### GUM
+
+To apply the combination of variances, one needs each variables 
+to be characterized by its mean value and variance or standard 
+uncertainty.
+
+For an easier and more foolproof coding, we use the following
+convention:
+
+* the mean value is stored in the variable, e.g. `x1`
+
+* the standard uncertainty has the name of the variable extended by '.u', 
+  e.g. `x1.u`
+
+```{r, tidy=FALSE}
+# Variables incertaines
+x1 = 1; x1.u = 0.1
+x2 = 1; x2.u = 0.1 
+```
+
+
+### GUM-Supp1
+
+For the combination of distributions, one needs to specify additional information: the probability density function (extension '.pdf'), and
+eventually the  umber of degrees of freedom (extension '.df').
+
+```{r, tidy=FALSE}
+# Variables incertaines
+x1.pdf = "norm"
+x2.pdf = "stud"; x2.df = 5 
+```
+
+#### Available distributions
+
+In order to ensure inputs compatibility between the _GUM_ and _GUM-Supp1_
+functions, the distributions are parameterized by their mean value $x.mu$ 
+and standard deviation $x.u$ (and if required by an additional 
+_degrees of freedom_ $x.df$). 
+For instance, the boundaries of the uniform distribution are computed 
+from $x.mu$ and $x.u$: $x_{min}=x.mu-x.u*\sqrt{3}$ and $x_{max}=x.mu+x.u*\sqrt{3}$.   
+
+`arcsine` 
+  : Arcsine derivative
+
+`delta`
+  : Dirac $\delta$ distribution, mainly used to fix temporarily the value of
+    a variable for sensitivity analysis, or to pass constants to the model.
+    Variables with null variance should be graciously filtered out by 
+    `rgumlib` UP and SA routines.
+    
+`lnorm` 
+  : Lognormal
+
+`norm`
+  : Normal
+
+`stud`  
+  : Student's _t_
+
+`tnorm`
+  : Truncated normal (positive values)
+
+`triangle` 
+  : Symmetric triangular
+
+`unif`  
+  : Uniform
+
+### Non-independent variables
+
+
+
+## Data gathering
+
+The naming convention exposed above is used to permit
+an automatic collect of information. 
+
+The function `collectParams(fff)' searches the environment for
+the mean values, standard uncertainties, etc... of the variables
+appearing in the definition of its first argument (an expression or
+a function). It returns a list containing the gathered information.
+
+```{r, echo=TRUE}
+# Collect parameters in environment
+params = collectParams(fExpr)
+str(params)
+```
+
+
+# Uncertainty propagation
+
+This section presents the functions used to perform 
+uncertainty propagation according to the GUM and its Supplement 1.
+
+## GUM
+
+The combination of variances is done withe the function `gumCV()`.
+
+```{r, echo=TRUE}
+G=with(params, 
+       gumCV(fExpr=fExpr,x.mu=x.mu,x.u=x.u,silent=FALSE)
+       )
+```
+
+This function returns a list 
+
+```{r, echo=TRUE}
+str(G)
+```
+
+A nicer version of the budget table can be obtained using 
+table printing functions, _e.g._ `kable`
+
+```{r, echo=TRUE}
+knitr::kable(G$budget)
+```
+
+## GUM-Supp1
+
+The propagation of distributions is generally performed by a
+numerical approach. The GUM-Supp1 recommends the Monte Carlo
+algorithm.  
+
+One can generate a predefined number of samples, but it is
+recommended to use an adaptive algorithm to ensure the 
+convergence of statistics of interest. In the first case,
+the user specifies the number of runs, and no convergence
+check is performed
+
+```{r, echo=TRUE}
+S=with(params, 
+       gumS1(fExpr=fExpr,x.mu=x.mu,x.u=x.u,x.pdf=x.pdf,x.df=x.df,
+             adapt=FALSE, nrun=1000)
+       )
+```
+
+Otherwise, the user specifies the statistics to converge
+(typically a standard deviation or a 95 % confidence interval)
+and the number of significant digits required.
+
+```{r, echo=TRUE}
+S=with(params, 
+       gumS1(fExpr=fExpr,x.mu=x.mu,x.u=x.u,x.pdf=x.pdf,x.df=x.df,
+             adapt=TRUE,ndig=1)
+       )
+```
+
+The adaptive algorithm proposed in the GUM-Supp1 and implemented
+in `gumS1()` has been shown to present several shortcomings,
+notably to stop too early. The convergence test is based on an
+enlargement factor 2 which is too small for small block numbers
+at the beginning of the procedure  (step _k_/ in the algorithm
+of Section 7.9.4 in GUM-Supp1). Globally, this adaptive
+algorithm has only 80 % success in predicting 95 % intervals
+containing the true value. Another problem is that the estimation
+of the numerical tolerance $\delta$ from $u(Y)$ is biased for
+small block sizes (step _j_/ of algorithm).
+
+The first problem can be partially solved by replacing the 
+enlargement factor 2 by a Student's $t$ factor $t_{0.975}(h-1)$,
+where $h$ is the number of blocks. This upgrades the success
+percentage to 91 %, and has been implemented by default in the
+`gumS1()` function.
+
+Another adaptive procedure based on Stein's two stages method has
+been implemented in `gumS2()`. This method has a success of 95 %
+^[Wübbeler et al. (2010) Metrologia 47:317].
+The two stages are:
+
+1 generate a small number of blocks $h_{1}$
+ 
+2 estimate the number of missing blocks to reach the 95 %
+  success target 
+  $$h_{2}=\max\left(\left\lfloor \frac{\left(s_{y}(h_{1})*t_{0.975}(h_{1}-1)\right)^{2}}{\delta^{2}}\right\rfloor -h_{1}+1,\,0\right)$$
+ 
+ 
+```{r, echo=TRUE}
+S=with(params, 
+       gumS2(fExpr=fExpr,x.mu=x.mu,x.u=x.u,x.pdf=x.pdf,x.df=x.df,
+             ndig=1)
+       )
+```
+
+### Diagnostics
+
+
+```{r, echo=TRUE, fig.show = "hold", fig.cap = "Graphical summaries of Monte Carlo samples: (left) cumulative statstics; (right) empirical cumulative distribution."}
+cumPlot(S$Y,cex=0.5)
+ECIPlot(S$Y,cex=0.5)
+```
+
+# Presentation of results
+
+To present the final results, the GUM advises to preserve 
+2 significant digits on the uncertainty and to round the 
+mean value accordingly. Helper functions are proposed
+to print the results, also as coverage intervals.
+
+```{r, echo=TRUE}
+uncPrint(y=G$y.mu,uy=G$y.u)
+```
+
+```{r, echo=TRUE}
+CIPrint(y=G$y.mu,uy=G$y.u,fac=1.96,p=0.95)
+```
+
+# Sensitivity Analysis
+
+
+## Analysis of variance
+
+For independent input variables, the ANOVA column of the
+uncertainty budget produced by `gumCV()` provides all the
+required information for SA. 
+
+```{r, echo=TRUE}
+G$anova
+```
+
+Let us call $S_i$ the relative contribution of variable 
+$X_i$ to the variance of $Y$. Then, a variation of $p$ %
+of the variance of $X_i$ induces a variation of $S_i*p$ %
+of $Y$ variance. This result (exact for linear models) 
+enables to assess the effect of each variable on $Y$ and 
+to target the variables to improve in order to reach a 
+desired variance for $Y$. 
+
+
+## Inputs-output correlation
+
+Samples from input variables and output can be used directly to
+calculate sensitivity indices. Scatterplots of the samples
+can be particularly informative, but do not provide numerical
+values.
+
+The correlation coefficients $\mathrm{cor}(Y,X_{i})$ between $Y$ and the inputs $\mathbf{X}$ can be easily evaluated.
+
+For a linear model, one has
+$$\mathrm{cor}(Y,X_{i})=\sum_{j=1}^{k}\left(\frac{\partial Y}{\partial X_{j}}\right)_{\overline{x}}\frac{u(x_{j})}{u(y)}\mathrm{cor}(X_{i},X_{j})$$
+For independent input variables, this simplifies to
+$$\mathrm{cor}^{2}(Y,X_{i})=\frac{\left(\frac{\partial Y}{\partial X_{i}}\right)_{\overline{x}}^{2}u^{2}(x_{i})}{u^{2}(y)}\equiv ANOVA_{i}$$
+
+Therefore, for linear models and independent variables, the
+correlation coefficients are directly related to the ANOVA.
+
+This cannot be directly extended to nonlinear models, but using
+rank correlation coefficients (Spearman) instead of Person's 
+enable good results with monotonous functions.
+
+One has also to remember that null correlation coefficients
+do not imply an absence of dependence between variables.
+
+The function `SAPlot()` generates a matrix plot with both
+scatterplots and correlation coefficients. 
+
+```{r, echo=TRUE, fig.cap = "Inputs-output scatterplots and correlations."}
+SAPlot(cbind(S$X,S$Y),cex=0.5)
+```
+
+The correlation coefficients can be obtained in base R:
+```{r, echo=TRUE}
+(CorP = cor(S$X,S$Y, method = "pearson"))
+cor(S$X,S$Y, method = "spearman")
+```
+
+## Sobol indices
+
+```{r, echo=TRUE, fig.show = "hold"}
+z=with(params,
+       sobolSA(fExpr=fExpr,x.mu=x.mu,x.u=x.u,x.pdf=x.pdf,x.df=x.df,
+               graph=TRUE,cex=0.5)
+       )
+print(z)
+```
+
+## Variance gradients
+
+Variance gradients^[Campanelli _et al._ (2013) _Meas. Sci. Tech._ 
+__24__:025002] are calculated from the samples for independent
+$\mathbf{X}$ and $Y$. They require the additional evaluation 
+of partial derivatives for each point of the sample.
+
+$$G_{i}=\frac{E\left[\left(Y-\overline{y}\right)\frac{\partial Y}
+        {\partial X_{i}}\left(X_{i}-\overline{x}_{i}\right)\right]}
+        {u^{2}(y)}$$
+
+```{r, echo=TRUE}
+d= vgSA(fExpr=fExpr,x.mu=params$x.mu, x.u=params$x.u, 
+        X=S$X, Y=S$Y, silent=TRUE)
+knitr::kable(d$budget)
+```
+
+These indices are interpreted as follows: a variation of $p$ % 
+of the variance of $X_i$ induces a variation of $G_i*p$ % of 
+$Y$ variance. Except for linear models, where one recovers the
+ANOVA $G_{i}=ANOVA_{i}$, this interpretation is valid for small
+values of $p$. This is to be contrasted with other indices, such 
+as Sobol's, which quantify the effect on $Y$  of a cancellation
+of the input's variance.
+
+An originality of variance gradients indices is that , for
+non-linear models, they can be negative. In such cases, reducing
+the variance of a variable might induce an increase in the
+variance of $Y$.
+
+## Note
+
+For linear models with independent variables, one can check
+that the sensitivity indices returned by the ANOVA, Sobol and VG
+methods are consistent with the square of the correlation
+coefficients (Pearson): 
+```{r, echo=TRUE}
+signif(CorP^2,3)
+```
+
+# Consolidated example: sum of squares
+
+One considers a quadratic model which presents a series of 
+traps for UP-SA
+$$Y = X_1^2 + X_2^2$$
+with $X_1 \sim Norm(\mu=0,\sigma=1)$ and $X_2 \sim Norm(\mu=0,\sigma=0.1)$.
+This is a case where the _GUM_ is inappropriate (non linear term), 
+and where the  inputs-output correlation SA method fails 
+(non-monotonous symmetric response).
+
+## Model and variables definition
+```{r, tidy=FALSE}
+# Expression analytique du modele
+fExpr = expression( x1^2 + x2^2 )
+
+# Variables incertaines
+x1=0; x1.u=1.0; x1.pdf = "norm"
+x2=1; x2.u=0.1; x2.pdf = "norm" 
+
+```
+
+## Résults
+```{r, echo=TRUE}
+# Collect parameters in environment
+params=collectParams(fExpr)
+```
+
+### GUM: Combinaison des variances
+```{r, echo=TRUE}
+G=with(params, 
+       gumCV(fExpr=fExpr,x.mu=x.mu,x.u=x.u,silent=TRUE)
+       )
+knitr::kable(G$budget)
+uncPrint(y=G$y.mu,uy=G$y.u)
+# Incertitude élargie
+CIPrint(y=G$y.mu,uy=G$y.u,fac=1.96,p=0.95)
+```
+
+### GUM-Supp1: Monte Carlo
+```{r, echo=TRUE}
+S=with(params, 
+       gumS2(fExpr=fExpr,x.mu=x.mu,x.u=x.u,x.pdf=x.pdf,x.df=x.df)
+       )
+```
+
+```{r, echo=TRUE, fig.show = "hold"}
+cumPlot(S$Y,cex=0.5)
+ECIPlot(S$Y,cex=0.5)
+```
+
+### Analyse globale de sensibilité
+
+#### Corrélation entrées/sortie
+```{r, echo=TRUE, fig.cap = "Inputs-output scatterplots and correlation."}
+SAPlot(cbind(S$X,S$Y),cex=0.5)
+```
+
+#### Indices de Sobol
+```{r, echo=TRUE, fig.show = "hold"}
+z=with(params,
+       sobolSA(fExpr=fExpr,x.mu=x.mu,x.u=x.u,x.pdf=x.pdf,x.df=x.df,
+               graph=TRUE,cex=0.5)
+       )
+print(z)
+```
+
+#### Gradients de la Variance
+```{r, echo=TRUE}
+d= vgSA(fExpr=fExpr,x.mu=params$x.mu, x.u=params$x.u, X=S$X, Y=S$Y, silent=TRUE)
+knitr::kable(d$budget)
+```
