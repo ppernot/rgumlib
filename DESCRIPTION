@@ -1,8 +1,8 @@
 Package: rgumlib
 Type: Package
 Title: Uncertainty Propagation (GUM & GUM-Supp1) and Sensitivity Analysis
-Version: 1.0.0
-Date: 2015-05-06
+Version: 1.1.0
+Date: 2017-06-14
 Author: Pascal PERNOT <pascal.pernot@u-psud.fr>
 Maintainer: Pascal PERNOT <pascal.pernot@u-psud.fr>
 Description: Uncertainty Propagation.

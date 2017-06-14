@@ -51,24 +51,31 @@ vgSA = function (fExpr, x.mu, x.u, X, Y, budgetTable = TRUE, silent=FALSE) {
     print("-budget: (dataframe) uncertainty budget table, mostly to be printed",quote=F)
     return(invisible())
   }
+  
   # Check data consistency
   L=length(x.mu)
   x = as.list(x.mu)
+  
   if(is.null(names(x))) names(x)=paste0('X',1:L)
+  
   var.names= if(class(fExpr)=='function')
     names(formals(fExpr))
   else
     all.vars(fExpr)
+  
   x.names=names(x)
   if(!all(x.names %in% var.names))
     stop('x.mu names do not match fExpr arguments')
 
+  # Calculate derivatives at sample inputs
   tabDeriv =  fDeriv(X,fExpr)
   Xc = scale(X,center=TRUE,scale=FALSE)
   Yc = matrix(scale(Y,center=TRUE,scale=FALSE),
                 ncol=ncol(Xc),nrow=nrow(Xc),byrow=FALSE)
   y.mu = mean(Y)
   varY = var(Y)
+  
+  # Variance gradients
   vg = colMeans(Yc*tabDeriv*Xc)/rep(varY,L)
   
   budget = NA
