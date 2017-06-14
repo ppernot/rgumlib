@@ -15,6 +15,7 @@ Imports:
     mvtnorm,
     triangle,
     msm,
+    png,
     visualTest
 Remotes:
     mangothecat/visualTest
