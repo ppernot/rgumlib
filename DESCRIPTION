@@ -14,7 +14,10 @@ Imports:
     numDeriv,
     mvtnorm,
     triangle,
-    msm
+    msm,
+    visualTest
+Remotes:
+    mangothecat/visualTest
 Suggests:
     knitr,
     fields,
