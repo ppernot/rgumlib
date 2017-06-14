@@ -1,13 +1,17 @@
 language: r
 cache: packages
+sudo: true
 
 warnings_are_errors: false
 
-sudo: false
-
 r_packages:
   - covr
+env:
+  global:
+  - _R_CHECK_FORCE_SUGGESTS_=false
 
 after_success:
-  - Rscript -e 'library(covr); codecov()'
-  
+  - Rscript -e 'covr::codecov()'
+
+before_install:
+  - Rscript -e 'update.packages(ask = FALSE)'
