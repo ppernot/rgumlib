@@ -54,8 +54,9 @@ uncPrint = function(y, uy) {
            short_uy = signif(uy/10^(n1-numDig+1),numDig)
          },
          {
-           fmt = paste0("%",n0-n1+numDig-1,".",-n1+numDig-1,"f")
-           short_uy = signif(uy/10^n1,numDig)
+           fmt = paste0("%",n0+numDig-1,".",numDig-1,"f")
+           # short_uy = signif(uy/10^n1,numDig)
+           short_uy = trimws(sprintf("%2.1f",uy/10^n1))
          },
          {    
            fmt = paste0("%",n0,".0f")
