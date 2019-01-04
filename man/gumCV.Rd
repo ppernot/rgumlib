@@ -5,7 +5,8 @@
 \title{Combination of Variances}
 \usage{
 gumCV(fExpr, x.mu, x.u, x.cor = diag(length(x.mu)), x.cov = NULL,
-  budgetTable = TRUE, silent = FALSE, tol = sqrt(.Machine$double.eps))
+  budgetTable = TRUE, silent = FALSE,
+  tol = sqrt(.Machine$double.eps))
 }
 \arguments{
 \item{fExpr}{An expression or a function object. For an expression,

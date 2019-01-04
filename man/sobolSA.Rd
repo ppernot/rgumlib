@@ -4,8 +4,8 @@
 \alias{sobolSA}
 \title{Sobol Sensitivity Indices}
 \usage{
-sobolSA(fExpr, x.mu, x.u, x.pdf, x.df, M = 10000, nboot = 0, graph = TRUE,
-  cex = 1)
+sobolSA(fExpr, x.mu, x.u, x.pdf, x.df, M = 10000, nboot = 0,
+  graph = TRUE, cex = 1)
 }
 \arguments{
 \item{fExpr}{An expression or a function object.}

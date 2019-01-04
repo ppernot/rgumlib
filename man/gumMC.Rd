@@ -3,7 +3,6 @@
 \name{gumS1}
 \alias{gumS1}
 \alias{gumS2}
-\alias{gumS2}
 \title{Combination of Distributions by Monte Carlo}
 \usage{
 gumS1(fExpr, x.mu, x.u, x.pdf, x.df, x.cor = diag(length(x.mu)),

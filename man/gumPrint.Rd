@@ -5,9 +5,6 @@
 \alias{UncPrint}
 \alias{CIPrint}
 \alias{CIPrint1}
-\alias{UncPrint}
-\alias{CIPrint}
-\alias{CIPrint1}
 \title{Printing Functions}
 \usage{
 uncPrint(y, uy)
